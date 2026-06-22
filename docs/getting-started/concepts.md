@@ -207,6 +207,64 @@ container:
     unhealthy_threshold: 3
 ```
 
+## Internal Architecture
+
+OmniDeploy uses different libraries for different operations:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        omnideploy CLI                           │
+├─────────────────────────────┬───────────────────────────────────┤
+│      Bootstrap Commands     │       Deployment Commands         │
+│  (bootstrap run/status)     │    (up, preview, destroy)         │
+├─────────────────────────────┼───────────────────────────────────┤
+│                             │                                   │
+│      AWS SDK v2 (Go)        │      Pulumi Automation API        │
+│                             │              │                    │
+│    ┌─────────────────┐      │    ┌─────────┴─────────┐          │
+│    │   IAM Service   │      │    │  Pulumi AWS SDK   │          │
+│    └─────────────────┘      │    └─────────┬─────────┘          │
+│                             │              │                    │
+│                             │      AWS SDK (internal)           │
+└─────────────────────────────┴───────────────────────────────────┘
+                              │
+                              ▼
+                         AWS APIs
+```
+
+### Why Two Libraries?
+
+| Command | Library | Reason |
+|---------|---------|--------|
+| `bootstrap` | **AWS SDK v2** | One-time IAM setup, no state needed |
+| `up/preview/destroy` | **Pulumi** | IaC with state management, drift detection, rollback |
+
+### Bootstrap (AWS SDK v2)
+
+The `bootstrap` command uses AWS SDK v2 directly because:
+
+- **Simple operations** - Just create IAM policy, group, user
+- **No state needed** - Idempotent, can run multiple times
+- **No Pulumi dependency** - Works without Pulumi installed
+
+### Deployments (Pulumi Automation API)
+
+Deployment commands use Pulumi because:
+
+- **State management** - Tracks what resources exist
+- **Dependency ordering** - Creates resources in correct order
+- **Drift detection** - Knows if resources changed externally
+- **Updates** - Can modify existing resources safely
+- **Rollback** - Can undo failed deployments
+
+### Credentials Flow
+
+Both libraries read AWS credentials from:
+
+1. Environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)
+2. Shared credentials file (`~/.aws/credentials`)
+3. AWS config profiles (`AWS_PROFILE`)
+
 ## Next Steps
 
 - [Configuration Schema](../configuration/schema.md) - Full configuration reference
