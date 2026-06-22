@@ -5,10 +5,13 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 
 	"github.com/plexusone/omnideploy/backend"
 	"github.com/plexusone/omnideploy/bootstrap"
@@ -42,8 +45,13 @@ var (
 	bootstrapRegion    string
 
 	// ECR flags
-	ecrRegion string
-	ecrForce  bool
+	ecrRegion     string
+	ecrForce      bool
+	ecrDockerfile string
+	ecrContext    string
+	ecrTag        string
+	ecrPlatform   string
+	ecrImage      string
 )
 
 func main() {
@@ -404,6 +412,12 @@ Examples:
   # List repositories
   omnideploy ecr list
 
+  # Build and push image (reads image URI from config)
+  omnideploy ecr push --config deploy.yaml
+
+  # Build and push with explicit image URI
+  omnideploy ecr push 123456789.dkr.ecr.us-west-2.amazonaws.com/my-app:latest
+
   # Get Docker login command
   omnideploy ecr login
 
@@ -543,6 +557,177 @@ var ecrDeleteCmd = &cobra.Command{
 	},
 }
 
+var ecrPushCmd = &cobra.Command{
+	Use:   "push [image-uri]",
+	Short: "Build and push a Docker image to ECR",
+	Long: `Build a Docker image and push it to ECR.
+
+The image URI can be specified as an argument or read from a config file.
+This command handles ECR login automatically.
+
+Examples:
+  # Push using image URI from deploy.yaml
+  omnideploy ecr push --config deploy.yaml
+
+  # Push with explicit image URI
+  omnideploy ecr push 123456789.dkr.ecr.us-west-2.amazonaws.com/my-app:latest
+
+  # Push with custom Dockerfile and context
+  omnideploy ecr push --config deploy.yaml --dockerfile Dockerfile.prod --context ./app
+
+  # Push for specific platform (e.g., for ARM-based systems)
+  omnideploy ecr push --config deploy.yaml --platform linux/amd64`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		// Determine image URI
+		imageURI := ecrImage
+		if len(args) > 0 {
+			imageURI = args[0]
+		}
+
+		// If no image specified, try to read from config
+		if imageURI == "" && configFile != "" {
+			uri, err := getImageFromConfig(configFile)
+			if err != nil {
+				return fmt.Errorf("failed to read image from config: %w", err)
+			}
+			imageURI = uri
+		}
+
+		if imageURI == "" {
+			return fmt.Errorf("image URI required: provide as argument, --image flag, or via --config")
+		}
+
+		// Override tag if specified
+		if ecrTag != "" {
+			// Replace tag in image URI
+			if idx := strings.LastIndex(imageURI, ":"); idx != -1 {
+				imageURI = imageURI[:idx] + ":" + ecrTag
+			} else {
+				imageURI = imageURI + ":" + ecrTag
+			}
+		}
+
+		// Extract registry from image URI for login
+		registry := extractRegistry(imageURI)
+		if registry == "" {
+			return fmt.Errorf("could not extract registry from image URI: %s", imageURI)
+		}
+
+		fmt.Printf("Image:      %s\n", imageURI)
+		fmt.Printf("Dockerfile: %s\n", ecrDockerfile)
+		fmt.Printf("Context:    %s\n", ecrContext)
+		if ecrPlatform != "" {
+			fmt.Printf("Platform:   %s\n", ecrPlatform)
+		}
+		fmt.Println()
+
+		// Step 1: Login to ECR
+		fmt.Println("Logging into ECR...")
+		client, err := ecr.New(ctx, ecrRegion)
+		if err != nil {
+			return fmt.Errorf("failed to create ECR client: %w", err)
+		}
+
+		creds, err := client.GetLoginCredentials(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to get ECR credentials: %w", err)
+		}
+
+		loginCmd := exec.CommandContext(ctx, "docker", "login",
+			"--username", creds.Username,
+			"--password-stdin", creds.Registry)
+		loginCmd.Stdin = strings.NewReader(creds.Password)
+		loginCmd.Stdout = os.Stdout
+		loginCmd.Stderr = os.Stderr
+
+		if err := loginCmd.Run(); err != nil {
+			return fmt.Errorf("docker login failed: %w", err)
+		}
+		fmt.Println("ECR login successful.")
+		fmt.Println()
+
+		// Step 2: Build the image
+		fmt.Println("Building Docker image...")
+		buildArgs := []string{"build", "-t", imageURI, "-f", ecrDockerfile}
+		if ecrPlatform != "" {
+			buildArgs = append(buildArgs, "--platform", ecrPlatform)
+		}
+		buildArgs = append(buildArgs, ecrContext)
+
+		buildCmd := exec.CommandContext(ctx, "docker", buildArgs...)
+		buildCmd.Stdout = os.Stdout
+		buildCmd.Stderr = os.Stderr
+
+		if err := buildCmd.Run(); err != nil {
+			return fmt.Errorf("docker build failed: %w", err)
+		}
+		fmt.Println("Build complete.")
+		fmt.Println()
+
+		// Step 3: Push the image
+		fmt.Println("Pushing to ECR...")
+		pushCmd := exec.CommandContext(ctx, "docker", "push", imageURI)
+		pushCmd.Stdout = os.Stdout
+		pushCmd.Stderr = os.Stderr
+
+		if err := pushCmd.Run(); err != nil {
+			return fmt.Errorf("docker push failed: %w", err)
+		}
+
+		fmt.Println()
+		fmt.Printf("Successfully pushed %s\n", imageURI)
+		return nil
+	},
+}
+
+// getImageFromConfig reads the container.image field from a deploy config file.
+func getImageFromConfig(configPath string) (string, error) {
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		return "", err
+	}
+
+	var config struct {
+		Container struct {
+			Image string `yaml:"image"`
+		} `yaml:"container"`
+	}
+
+	if err := yaml.Unmarshal(data, &config); err != nil {
+		return "", err
+	}
+
+	if config.Container.Image == "" {
+		return "", fmt.Errorf("container.image not found in config")
+	}
+
+	return config.Container.Image, nil
+}
+
+// extractRegistry extracts the registry hostname from an image URI.
+// e.g., "123456789.dkr.ecr.us-west-2.amazonaws.com/my-app:latest" -> "123456789.dkr.ecr.us-west-2.amazonaws.com"
+func extractRegistry(imageURI string) string {
+	// Remove tag
+	uri := imageURI
+	if idx := strings.LastIndex(uri, ":"); idx != -1 {
+		// Make sure it's a tag, not a port in the registry
+		afterColon := uri[idx+1:]
+		if !strings.Contains(afterColon, "/") {
+			uri = uri[:idx]
+		}
+	}
+
+	// Get registry (everything before first /)
+	if idx := strings.Index(uri, "/"); idx != -1 {
+		return uri[:idx]
+	}
+
+	return ""
+}
+
 func init() {
 	upCmd.Flags().BoolVarP(&autoApprove, "yes", "y", false, "Auto-approve changes")
 	destroyCmd.Flags().BoolVarP(&autoApprove, "yes", "y", false, "Auto-approve destruction")
@@ -563,10 +748,19 @@ func init() {
 	ecrCmd.AddCommand(ecrListCmd)
 	ecrCmd.AddCommand(ecrLoginCmd)
 	ecrCmd.AddCommand(ecrDeleteCmd)
+	ecrCmd.AddCommand(ecrPushCmd)
 
 	// ECR flags
 	ecrCmd.PersistentFlags().StringVar(&ecrRegion, "region", "us-west-2", "AWS region")
 	ecrDeleteCmd.Flags().BoolVar(&ecrForce, "force", false, "Skip confirmation")
+
+	// ECR push flags
+	ecrPushCmd.Flags().StringVarP(&configFile, "config", "c", "", "Config file to read image URI from")
+	ecrPushCmd.Flags().StringVar(&ecrImage, "image", "", "Image URI (overrides config)")
+	ecrPushCmd.Flags().StringVar(&ecrDockerfile, "dockerfile", "Dockerfile", "Path to Dockerfile")
+	ecrPushCmd.Flags().StringVar(&ecrContext, "context", ".", "Build context directory")
+	ecrPushCmd.Flags().StringVar(&ecrTag, "tag", "", "Image tag (overrides tag in image URI)")
+	ecrPushCmd.Flags().StringVar(&ecrPlatform, "platform", "", "Target platform (e.g., linux/amd64)")
 }
 
 func createDeployer() (*deploy.Deployer, error) {
