@@ -2,6 +2,26 @@
 
 Configure AWS credentials and permissions for OmniDeploy.
 
+## Quick Start with Bootstrap Command
+
+The easiest way to set up AWS IAM resources is using the `omnideploy bootstrap` command:
+
+```bash
+# Using admin credentials, create policy and group
+omnideploy bootstrap run
+
+# Or create a user with access keys
+omnideploy bootstrap run --user deployer --create-key
+```
+
+This creates:
+
+- **OmniDeployPolicy** - IAM policy with required permissions
+- **omnideploy-users** - IAM group with the policy attached
+- Optionally, an IAM user with access keys
+
+See [Bootstrap Command](#bootstrap-command) for details.
+
 ## Required Permissions
 
 OmniDeploy needs permissions for the deployment target and container registry.
@@ -282,3 +302,57 @@ aws ecr get-login-password --region us-east-1
 ```
 
 If this fails, check IAM permissions.
+
+## Bootstrap Command
+
+The `omnideploy bootstrap` command automates IAM setup.
+
+### Commands
+
+```bash
+# Create policy and group (requires admin credentials)
+omnideploy bootstrap run
+
+# Create policy, group, and user with access keys
+omnideploy bootstrap run --user deployer --create-key
+
+# Check current status
+omnideploy bootstrap status
+
+# View the IAM policy document
+omnideploy bootstrap policy
+```
+
+### Workflow
+
+1. **Get admin credentials** - Use AWS Console or existing admin profile
+
+2. **Run bootstrap**:
+   ```bash
+   export AWS_PROFILE=admin  # or export AWS_ACCESS_KEY_ID/SECRET
+   omnideploy bootstrap run --user deployer --create-key
+   ```
+
+3. **Save the output** - Copy the access key and secret
+
+4. **Use new credentials for deployments**:
+   ```bash
+   export AWS_ACCESS_KEY_ID="AKIA..."
+   export AWS_SECRET_ACCESS_KEY="..."
+   export AWS_REGION="us-east-1"
+
+   omnideploy up --config deploy.yaml
+   ```
+
+### What Bootstrap Creates
+
+| Resource | Name | Description |
+|----------|------|-------------|
+| IAM Policy | `OmniDeployPolicy` | Permissions for LightSail, ECR, SSM |
+| IAM Group | `omnideploy-users` | Group with policy attached |
+| IAM User | (optional) | User in the group |
+| Access Key | (optional) | Credentials for the user |
+
+### Idempotent
+
+The bootstrap command is safe to run multiple times. It checks for existing resources and skips creation if they already exist.
