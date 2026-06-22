@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -195,7 +194,7 @@ var destroyCmd = &cobra.Command{
 			fmt.Printf("This will destroy stack '%s'. Are you sure? [y/N] ", name)
 			var confirm string
 			if _, err := fmt.Scanln(&confirm); err != nil {
-				slog.Warn("failed to read confirmation", "error", err)
+				return fmt.Errorf("failed to read confirmation: %w", err)
 			}
 			if confirm != "y" && confirm != "Y" {
 				fmt.Println("Cancelled.")
@@ -540,7 +539,7 @@ var ecrDeleteCmd = &cobra.Command{
 			fmt.Printf("Delete repository '%s'? This will delete all images. [y/N] ", repoName)
 			var confirm string
 			if _, err := fmt.Scanln(&confirm); err != nil {
-				slog.Warn("failed to read confirmation", "error", err)
+				return fmt.Errorf("failed to read confirmation: %w", err)
 			}
 			if confirm != "y" && confirm != "Y" {
 				fmt.Println("Cancelled.")

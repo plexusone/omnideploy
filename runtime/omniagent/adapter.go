@@ -3,7 +3,6 @@ package omniagent
 
 import (
 	"fmt"
-	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -95,10 +94,7 @@ func (a *Adapter) convert(cfg *OmniAgentConfig, path string) (*config.DeployConf
 		// Parse port from address like "127.0.0.1:8080"
 		if parts := strings.Split(cfg.Gateway.Address, ":"); len(parts) == 2 {
 			if _, err := fmt.Sscanf(parts[1], "%d", &port); err != nil {
-				slog.Warn("failed to parse port from gateway address, using default",
-					"address", cfg.Gateway.Address,
-					"default_port", port,
-					"error", err)
+				return nil, fmt.Errorf("invalid port in gateway.address %q: %w", cfg.Gateway.Address, err)
 			}
 		}
 	}
