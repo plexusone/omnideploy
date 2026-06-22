@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/plexusone/omnideploy/backend"
+	"github.com/plexusone/omnideploy/bootstrap"
 	"github.com/plexusone/omnideploy/deploy"
 	"github.com/plexusone/omnideploy/runtime"
 	"github.com/plexusone/omnideploy/target"
@@ -33,6 +34,11 @@ var (
 	runtimeName string
 	stackName   string
 	autoApprove bool
+
+	// Bootstrap flags
+	bootstrapUser      string
+	bootstrapCreateKey bool
+	bootstrapRegion    string
 )
 
 func main() {
@@ -66,6 +72,7 @@ func init() {
 	rootCmd.AddCommand(targetsCmd)
 	rootCmd.AddCommand(backendsCmd)
 	rootCmd.AddCommand(runtimesCmd)
+	rootCmd.AddCommand(bootstrapCmd)
 }
 
 var upCmd = &cobra.Command{
@@ -229,9 +236,167 @@ var runtimesCmd = &cobra.Command{
 	},
 }
 
+var bootstrapCmd = &cobra.Command{
+	Use:   "bootstrap",
+	Short: "Set up AWS IAM resources for OmniDeploy",
+	Long: `Bootstrap creates the required AWS IAM resources for OmniDeploy:
+
+  - IAM Policy (OmniDeployPolicy) with permissions for LightSail, ECR, and SSM
+  - IAM Group (omnideploy-users) with the policy attached
+  - Optionally, an IAM User with access keys
+
+This command requires admin-level AWS credentials to create IAM resources.
+After bootstrap, use the created credentials for deployments.
+
+Examples:
+  # Create policy and group only
+  omnideploy bootstrap
+
+  # Create policy, group, user, and access keys
+  omnideploy bootstrap --user deployer --create-key
+
+  # Show current bootstrap status
+  omnideploy bootstrap status
+
+  # Show the IAM policy document
+  omnideploy bootstrap policy`,
+}
+
+var bootstrapRunCmd = &cobra.Command{
+	Use:   "run",
+	Short: "Run the bootstrap process",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		cfg := bootstrap.DefaultConfig()
+		if bootstrapRegion != "" {
+			cfg.Region = bootstrapRegion
+		}
+		if bootstrapUser != "" {
+			cfg.UserName = bootstrapUser
+			cfg.CreateAccessKey = bootstrapCreateKey
+		}
+
+		b, err := bootstrap.New(ctx, cfg)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("Bootstrapping OmniDeploy IAM resources...")
+		fmt.Printf("  Policy:  %s\n", cfg.PolicyName)
+		fmt.Printf("  Group:   %s\n", cfg.GroupName)
+		if cfg.UserName != "" {
+			fmt.Printf("  User:    %s\n", cfg.UserName)
+		}
+		fmt.Println()
+
+		result, err := b.Run(ctx)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("Bootstrap complete!")
+		fmt.Printf("  Policy ARN: %s\n", result.PolicyARN)
+		fmt.Printf("  Group:      %s\n", result.GroupName)
+
+		if result.UserName != "" {
+			fmt.Printf("  User:       %s\n", result.UserName)
+		}
+
+		if result.AccessKeyID != "" {
+			fmt.Println()
+			fmt.Println("Access Key Created:")
+			fmt.Println("  Save these credentials - the secret will not be shown again!")
+			fmt.Println()
+			fmt.Printf("  AWS_ACCESS_KEY_ID=%s\n", result.AccessKeyID)
+			fmt.Printf("  AWS_SECRET_ACCESS_KEY=%s\n", result.SecretAccessKey)
+			fmt.Println()
+			fmt.Println("Add to your shell profile or use:")
+			fmt.Printf("  export AWS_ACCESS_KEY_ID=\"%s\"\n", result.AccessKeyID)
+			fmt.Printf("  export AWS_SECRET_ACCESS_KEY=\"%s\"\n", result.SecretAccessKey)
+			fmt.Printf("  export AWS_REGION=\"%s\"\n", cfg.Region)
+		}
+
+		return nil
+	},
+}
+
+var bootstrapStatusCmd = &cobra.Command{
+	Use:   "status",
+	Short: "Show current bootstrap status",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		cfg := bootstrap.DefaultConfig()
+		if bootstrapRegion != "" {
+			cfg.Region = bootstrapRegion
+		}
+
+		b, err := bootstrap.New(ctx, cfg)
+		if err != nil {
+			return err
+		}
+
+		status, err := b.Status(ctx)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("OmniDeploy Bootstrap Status:")
+		fmt.Println()
+
+		if status.PolicyExists {
+			fmt.Printf("  Policy:  ✓ %s\n", status.PolicyARN)
+		} else {
+			fmt.Printf("  Policy:  ✗ Not created\n")
+		}
+
+		if status.GroupExists {
+			fmt.Printf("  Group:   ✓ %s\n", status.GroupName)
+			if len(status.GroupMembers) > 0 {
+				fmt.Printf("  Members: %v\n", status.GroupMembers)
+			} else {
+				fmt.Printf("  Members: (none)\n")
+			}
+		} else {
+			fmt.Printf("  Group:   ✗ Not created\n")
+		}
+
+		if !status.PolicyExists || !status.GroupExists {
+			fmt.Println()
+			fmt.Println("Run 'omnideploy bootstrap run' to set up IAM resources.")
+		}
+
+		return nil
+	},
+}
+
+var bootstrapPolicyCmd = &cobra.Command{
+	Use:   "policy",
+	Short: "Show the IAM policy document",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("OmniDeploy IAM Policy:")
+		fmt.Println()
+		fmt.Println(bootstrap.PolicyJSON())
+	},
+}
+
 func init() {
 	upCmd.Flags().BoolVarP(&autoApprove, "yes", "y", false, "Auto-approve changes")
 	destroyCmd.Flags().BoolVarP(&autoApprove, "yes", "y", false, "Auto-approve destruction")
+
+	// Bootstrap subcommands
+	bootstrapCmd.AddCommand(bootstrapRunCmd)
+	bootstrapCmd.AddCommand(bootstrapStatusCmd)
+	bootstrapCmd.AddCommand(bootstrapPolicyCmd)
+
+	// Bootstrap flags
+	bootstrapRunCmd.Flags().StringVar(&bootstrapUser, "user", "", "IAM user to create")
+	bootstrapRunCmd.Flags().BoolVar(&bootstrapCreateKey, "create-key", false, "Create access key for user")
+	bootstrapRunCmd.Flags().StringVar(&bootstrapRegion, "region", "us-east-1", "AWS region")
+	bootstrapStatusCmd.Flags().StringVar(&bootstrapRegion, "region", "us-east-1", "AWS region")
 }
 
 func createDeployer() (*deploy.Deployer, error) {
