@@ -56,10 +56,10 @@ func (t *Target) ResourceSpec(cfg *config.DeployConfig) (*target.ResourceSpec, e
 
 	// Build container definition
 	containerDef := map[string]any{
-		"image":   cfg.Container.Image,
-		"command": cfg.Container.Args,
+		"image":       cfg.Container.Image,
+		"command":     cfg.Container.Args,
 		"environment": cfg.Environment,
-		"ports":   buildPorts(cfg.Container.Ports),
+		"ports":       buildPorts(cfg.Container.Ports),
 	}
 
 	// Build public endpoint if service is public
