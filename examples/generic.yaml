@@ -1,0 +1,33 @@
+# Example: Generic container deployment
+# Usage: omnideploy up --config examples/generic.yaml --target lightsail --backend pulumi
+
+name: my-api
+version: "1.0.0"
+region: us-east-1
+
+container:
+  image: nginx:latest
+  ports:
+    - container_port: 80
+      protocol: HTTP
+      name: http
+  health_check:
+    path: /
+    interval: 30s
+    timeout: 5s
+    healthy_threshold: 2
+    unhealthy_threshold: 3
+
+service:
+  replicas: 1
+  public: true
+
+resources:
+  size: micro
+
+environment:
+  NGINX_HOST: localhost
+
+tags:
+  environment: production
+  team: platform

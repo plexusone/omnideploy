@@ -1,0 +1,23 @@
+# Example: Deploy OmniAgent to AWS LightSail
+# Usage: omnideploy up --config examples/omniagent.yaml --target lightsail --backend pulumi
+
+# OmniAgent gateway configuration
+gateway:
+  address: "0.0.0.0:18789"
+
+# Agent configuration
+agent:
+  provider: anthropic
+  model: claude-sonnet-4-20250514
+  api_key: ${ANTHROPIC_API_KEY}
+
+# Deployment configuration (omnideploy-specific)
+deploy:
+  name: omniagent-prod
+  region: us-east-1
+  image: ghcr.io/plexusone/omniagent:latest
+  replicas: 1
+  resources:
+    size: micro  # nano, micro, small, medium, large, xlarge
+  environment:
+    LOG_LEVEL: info
