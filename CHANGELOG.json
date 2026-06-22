@@ -1,0 +1,56 @@
+{
+  "irVersion": "1.0",
+  "project": "omnideploy",
+  "repository": "https://github.com/plexusone/omnideploy",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "maintainers": ["plexusone"],
+  "releases": [
+    {
+      "version": "v0.1.0",
+      "date": "2026-06-22",
+      "highlights": [
+        { "description": "Universal deployment tool for container applications with declarative YAML configuration" },
+        { "description": "AWS LightSail container service support with Pulumi IaC backend" },
+        { "description": "ECR repository management with build and push workflow" }
+      ],
+      "added": [
+        { "description": "Core interfaces and configuration schema for deployment targets, backends, and runtimes", "commit": "311447d" },
+        { "description": "AWS LightSail container service target with automatic container definition generation", "commit": "0ffa07e" },
+        { "description": "Pulumi IaC backend for infrastructure state management", "commit": "de73285" },
+        { "description": "OmniAgent and generic container runtime adapters", "commit": "3550a5c" },
+        { "description": "`omnideploy` CLI with `up`, `destroy`, and `preview` commands", "commit": "aca4742" },
+        { "description": "`bootstrap` command for AWS IAM setup with required permissions", "commit": "870c4ee" },
+        { "description": "`ecr` command group for ECR repository management (`create`, `list`, `delete`, `login`)", "commit": "a1511cc" },
+        { "description": "`ecr push` command for building and pushing Docker images to ECR", "commit": "e199047" },
+        { "description": "Example deployment configurations for OmniAgent and generic containers", "commit": "f0ae0b8" }
+      ],
+      "fixed": [
+        { "description": "Change default AWS region to us-west-2", "commit": "0043e98" }
+      ],
+      "documentation": [
+        { "description": "README with usage guide and configuration reference", "commit": "6d2862b" },
+        { "description": "MkDocs documentation site with PlexusOne design system theme", "commit": "d8963ce" },
+        { "description": "AWS setup guide with IAM permissions reference", "commit": "39b129e" },
+        { "description": "Bootstrap command documentation", "commit": "8b7b147" },
+        { "description": "Internal architecture diagram", "commit": "689de5c" },
+        { "description": "README shields for build status and license", "commit": "f895848" },
+        { "description": "Adopt PlexusOne unified navigation and theme", "commit": "82db035" }
+      ],
+      "dependencies": [
+        { "description": "Add go.mod with Pulumi SDK v3 and Cobra dependencies", "commit": "eaf7807" },
+        { "description": "Bump github.com/pulumi/pulumi/sdk/v3", "commit": "9b47085" },
+        { "description": "Bump github.com/pulumi/pulumi-aws/sdk/v6", "commit": "758df68" },
+        { "description": "Update go.mod dependencies", "commit": "8e076dd" },
+        { "description": "Add gopkg.in/yaml.v3 for config parsing", "commit": "ff4f48a" }
+      ],
+      "infrastructure": [
+        { "description": "Add GitHub Actions shared workflows for CI", "commit": "e3a97f8" }
+      ],
+      "internal": [
+        { "description": "Add MIT LICENSE file", "commit": "00a9cae" },
+        { "description": "Align struct field formatting in LightSail target", "commit": "2a47c76" }
+      ]
+    }
+  ]
+}
