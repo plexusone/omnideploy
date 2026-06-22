@@ -22,6 +22,28 @@ This creates:
 
 See [Bootstrap Command](#bootstrap-command) for details.
 
+## Supported Regions
+
+LightSail Container Services are available in these regions:
+
+| Region | Location |
+|--------|----------|
+| `us-west-2` | Oregon (default) |
+| `us-east-1` | N. Virginia |
+| `us-east-2` | Ohio |
+| `eu-west-1` | Ireland |
+| `eu-west-2` | London |
+| `eu-west-3` | Paris |
+| `eu-central-1` | Frankfurt |
+| `ap-south-1` | Mumbai |
+| `ap-northeast-1` | Tokyo |
+| `ap-northeast-2` | Seoul |
+| `ap-southeast-1` | Singapore |
+| `ap-southeast-2` | Sydney |
+| `ca-central-1` | Canada |
+
+**Note:** `us-west-1` (N. California) does NOT support LightSail containers.
+
 ## Required Permissions
 
 OmniDeploy needs permissions for the deployment target and container registry.
@@ -158,7 +180,7 @@ For teams, use groups:
 ```bash
 export AWS_ACCESS_KEY_ID="AKIA..."
 export AWS_SECRET_ACCESS_KEY="..."
-export AWS_REGION="us-east-1"
+export AWS_REGION="us-west-2"
 ```
 
 ### AWS CLI Profile
@@ -184,7 +206,7 @@ Add to `~/.aws/config`:
 
 ```ini
 [profile omnideploy]
-region = us-east-1
+region = us-west-2
 output = json
 ```
 
@@ -210,37 +232,37 @@ Create a repository for your container images:
 # Create repository
 aws ecr create-repository \
     --repository-name my-app \
-    --region us-east-1
+    --region us-west-2
 
 # Get repository URI
 aws ecr describe-repositories \
     --repository-names my-app \
     --query 'repositories[0].repositoryUri' \
     --output text
-# Output: 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-app
+# Output: 123456789012.dkr.ecr.us-west-2.amazonaws.com/my-app
 ```
 
 ### Push Image to ECR
 
 ```bash
 # Login to ECR
-aws ecr get-login-password --region us-east-1 | \
+aws ecr get-login-password --region us-west-2 | \
     docker login --username AWS --password-stdin \
-    123456789012.dkr.ecr.us-east-1.amazonaws.com
+    123456789012.dkr.ecr.us-west-2.amazonaws.com
 
 # Tag image
 docker tag my-app:latest \
-    123456789012.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+    123456789012.dkr.ecr.us-west-2.amazonaws.com/my-app:latest
 
 # Push
-docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+docker push 123456789012.dkr.ecr.us-west-2.amazonaws.com/my-app:latest
 ```
 
 ### Update deploy.yaml
 
 ```yaml
 container:
-  image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+  image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/my-app:latest
 ```
 
 ## Using GHCR with Private Repos
@@ -298,7 +320,7 @@ aws sso login --profile your-profile
 Ensure you have `ecr:GetAuthorizationToken` permission:
 
 ```bash
-aws ecr get-login-password --region us-east-1
+aws ecr get-login-password --region us-west-2
 ```
 
 If this fails, check IAM permissions.
@@ -339,7 +361,7 @@ omnideploy bootstrap policy
    ```bash
    export AWS_ACCESS_KEY_ID="AKIA..."
    export AWS_SECRET_ACCESS_KEY="..."
-   export AWS_REGION="us-east-1"
+   export AWS_REGION="us-west-2"
 
    omnideploy up --config deploy.yaml
    ```

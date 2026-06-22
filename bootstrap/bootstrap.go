@@ -40,7 +40,7 @@ func DefaultConfig() Config {
 	return Config{
 		PolicyName: "OmniDeployPolicy",
 		GroupName:  "omnideploy-users",
-		Region:     "us-east-1",
+		Region:     "us-west-2", // Oregon - LightSail containers supported
 	}
 }
 

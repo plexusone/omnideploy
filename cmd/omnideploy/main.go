@@ -395,8 +395,8 @@ func init() {
 	// Bootstrap flags
 	bootstrapRunCmd.Flags().StringVar(&bootstrapUser, "user", "", "IAM user to create")
 	bootstrapRunCmd.Flags().BoolVar(&bootstrapCreateKey, "create-key", false, "Create access key for user")
-	bootstrapRunCmd.Flags().StringVar(&bootstrapRegion, "region", "us-east-1", "AWS region")
-	bootstrapStatusCmd.Flags().StringVar(&bootstrapRegion, "region", "us-east-1", "AWS region")
+	bootstrapRunCmd.Flags().StringVar(&bootstrapRegion, "region", "us-west-2", "AWS region (must support LightSail containers)")
+	bootstrapStatusCmd.Flags().StringVar(&bootstrapRegion, "region", "us-west-2", "AWS region")
 }
 
 func createDeployer() (*deploy.Deployer, error) {
