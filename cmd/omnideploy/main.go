@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -193,7 +194,9 @@ var destroyCmd = &cobra.Command{
 		if !autoApprove {
 			fmt.Printf("This will destroy stack '%s'. Are you sure? [y/N] ", name)
 			var confirm string
-			fmt.Scanln(&confirm)
+			if _, err := fmt.Scanln(&confirm); err != nil {
+				slog.Warn("failed to read confirmation", "error", err)
+			}
 			if confirm != "y" && confirm != "Y" {
 				fmt.Println("Cancelled.")
 				return nil
@@ -536,7 +539,9 @@ var ecrDeleteCmd = &cobra.Command{
 		if !ecrForce {
 			fmt.Printf("Delete repository '%s'? This will delete all images. [y/N] ", repoName)
 			var confirm string
-			fmt.Scanln(&confirm)
+			if _, err := fmt.Scanln(&confirm); err != nil {
+				slog.Warn("failed to read confirmation", "error", err)
+			}
 			if confirm != "y" && confirm != "Y" {
 				fmt.Println("Cancelled.")
 				return nil
@@ -636,6 +641,7 @@ Examples:
 			return fmt.Errorf("failed to get ECR credentials: %w", err)
 		}
 
+		// nolint:gosec // G204: Registry URL comes from AWS ECR API, not user input
 		loginCmd := exec.CommandContext(ctx, "docker", "login",
 			"--username", creds.Username,
 			"--password-stdin", creds.Registry)
