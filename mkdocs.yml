@@ -1,0 +1,86 @@
+site_name: OmniDeploy
+site_description: Universal deployment tool for container applications
+site_url: https://plexusone.github.io/omnideploy/
+repo_url: https://github.com/plexusone/omnideploy
+repo_name: plexusone/omnideploy
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+      - Concepts: getting-started/concepts.md
+  - Configuration:
+      - Schema Reference: configuration/schema.md
+      - Examples: configuration/examples.md
+      - Environment Variables: configuration/environment.md
+      - Secrets Management: configuration/secrets.md
+  - Targets:
+      - Overview: targets/index.md
+      - AWS LightSail: targets/lightsail.md
+      - AWS ECS: targets/ecs.md
+      - AWS AgentCore: targets/agentcore.md
+      - Kubernetes: targets/kubernetes.md
+      - DigitalOcean: targets/digitalocean.md
+  - Backends:
+      - Overview: backends/index.md
+      - Pulumi: backends/pulumi.md
+      - AWS CDK: backends/cdk.md
+      - Terraform: backends/terraform.md
+  - Deployment:
+      - Local Deployment: deployment/local.md
+      - GitHub Actions: deployment/github-actions.md
+      - GitLab CI: deployment/gitlab-ci.md
+      - Continuous Deployment: deployment/continuous.md
+  - Runtime Adapters:
+      - Overview: runtimes/index.md
+      - OmniAgent: runtimes/omniagent.md
+      - AgentKit: runtimes/agentkit.md
+      - Generic Container: runtimes/container.md
+  - Reference:
+      - CLI Commands: reference/cli.md
+      - Go API: reference/api.md
+      - Extending OmniDeploy: reference/extending.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/plexusone/omnideploy
