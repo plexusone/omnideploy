@@ -1,0 +1,13 @@
+.DS_Store
+.env
+.envrc
+.config.json
+_*
+*.tar
+*.db
+coverage.txt
+debug.test
+main
+main.zip
+/omniagent
+/site/

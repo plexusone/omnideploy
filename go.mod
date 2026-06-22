@@ -5,6 +5,7 @@ go 1.24.1
 require (
 	github.com/aws/aws-sdk-go-v2 v1.42.0
 	github.com/aws/aws-sdk-go-v2/config v1.32.25
+	github.com/aws/aws-sdk-go-v2/service/ecr v1.58.4
 	github.com/aws/aws-sdk-go-v2/service/iam v1.54.5
 	github.com/pulumi/pulumi-aws/sdk/v6 v6.72.0
 	github.com/pulumi/pulumi/sdk/v3 v3.156.0

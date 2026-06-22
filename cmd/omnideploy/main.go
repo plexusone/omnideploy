@@ -13,6 +13,7 @@ import (
 	"github.com/plexusone/omnideploy/backend"
 	"github.com/plexusone/omnideploy/bootstrap"
 	"github.com/plexusone/omnideploy/deploy"
+	"github.com/plexusone/omnideploy/ecr"
 	"github.com/plexusone/omnideploy/runtime"
 	"github.com/plexusone/omnideploy/target"
 
@@ -39,6 +40,10 @@ var (
 	bootstrapUser      string
 	bootstrapCreateKey bool
 	bootstrapRegion    string
+
+	// ECR flags
+	ecrRegion string
+	ecrForce  bool
 )
 
 func main() {
@@ -73,6 +78,7 @@ func init() {
 	rootCmd.AddCommand(backendsCmd)
 	rootCmd.AddCommand(runtimesCmd)
 	rootCmd.AddCommand(bootstrapCmd)
+	rootCmd.AddCommand(ecrCmd)
 }
 
 var upCmd = &cobra.Command{
@@ -383,6 +389,160 @@ var bootstrapPolicyCmd = &cobra.Command{
 	},
 }
 
+var ecrCmd = &cobra.Command{
+	Use:   "ecr",
+	Short: "Manage ECR container repositories",
+	Long: `Manage Amazon ECR (Elastic Container Registry) repositories.
+
+ECR is used to store container images that are deployed to LightSail
+or other AWS container services.
+
+Examples:
+  # Create a repository
+  omnideploy ecr create my-app
+
+  # List repositories
+  omnideploy ecr list
+
+  # Get Docker login command
+  omnideploy ecr login
+
+  # Delete a repository
+  omnideploy ecr delete my-app`,
+}
+
+var ecrCreateCmd = &cobra.Command{
+	Use:   "create <repository-name>",
+	Short: "Create an ECR repository",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		repoName := args[0]
+
+		client, err := ecr.New(ctx, ecrRegion)
+		if err != nil {
+			return err
+		}
+
+		repo, created, err := client.EnsureRepository(ctx, repoName)
+		if err != nil {
+			return fmt.Errorf("failed to create repository: %w", err)
+		}
+
+		if created {
+			fmt.Println("Repository created:")
+		} else {
+			fmt.Println("Repository already exists:")
+		}
+		fmt.Printf("  Name: %s\n", repo.Name)
+		fmt.Printf("  URI:  %s\n", repo.URI)
+		fmt.Println()
+		fmt.Println("Update your deploy.yaml:")
+		fmt.Printf("  container:\n")
+		fmt.Printf("    image: %s:latest\n", repo.URI)
+
+		return nil
+	},
+}
+
+var ecrListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List ECR repositories",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		client, err := ecr.New(ctx, ecrRegion)
+		if err != nil {
+			return err
+		}
+
+		repos, err := client.ListRepositories(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to list repositories: %w", err)
+		}
+
+		if len(repos) == 0 {
+			fmt.Println("No repositories found.")
+			return nil
+		}
+
+		fmt.Println("ECR Repositories:")
+		for _, r := range repos {
+			fmt.Printf("  %s\n", r.Name)
+			fmt.Printf("    URI: %s\n", r.URI)
+		}
+
+		return nil
+	},
+}
+
+var ecrLoginCmd = &cobra.Command{
+	Use:   "login",
+	Short: "Get Docker login credentials for ECR",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		client, err := ecr.New(ctx, ecrRegion)
+		if err != nil {
+			return err
+		}
+
+		creds, err := client.GetLoginCredentials(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to get login credentials: %w", err)
+		}
+
+		fmt.Println("Docker login command:")
+		fmt.Println()
+		fmt.Printf("  echo '%s' | docker login --username %s --password-stdin %s\n",
+			creds.Password, creds.Username, creds.Registry)
+		fmt.Println()
+		fmt.Println("Or run directly:")
+		fmt.Printf("  aws ecr get-login-password --region %s | docker login --username AWS --password-stdin %s\n",
+			ecrRegion, creds.Registry)
+
+		return nil
+	},
+}
+
+var ecrDeleteCmd = &cobra.Command{
+	Use:   "delete <repository-name>",
+	Short: "Delete an ECR repository",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+		defer cancel()
+
+		repoName := args[0]
+
+		if !ecrForce {
+			fmt.Printf("Delete repository '%s'? This will delete all images. [y/N] ", repoName)
+			var confirm string
+			fmt.Scanln(&confirm)
+			if confirm != "y" && confirm != "Y" {
+				fmt.Println("Cancelled.")
+				return nil
+			}
+		}
+
+		client, err := ecr.New(ctx, ecrRegion)
+		if err != nil {
+			return err
+		}
+
+		if err := client.DeleteRepository(ctx, repoName, true); err != nil {
+			return fmt.Errorf("failed to delete repository: %w", err)
+		}
+
+		fmt.Printf("Repository '%s' deleted.\n", repoName)
+		return nil
+	},
+}
+
 func init() {
 	upCmd.Flags().BoolVarP(&autoApprove, "yes", "y", false, "Auto-approve changes")
 	destroyCmd.Flags().BoolVarP(&autoApprove, "yes", "y", false, "Auto-approve destruction")
@@ -397,6 +557,16 @@ func init() {
 	bootstrapRunCmd.Flags().BoolVar(&bootstrapCreateKey, "create-key", false, "Create access key for user")
 	bootstrapRunCmd.Flags().StringVar(&bootstrapRegion, "region", "us-west-2", "AWS region (must support LightSail containers)")
 	bootstrapStatusCmd.Flags().StringVar(&bootstrapRegion, "region", "us-west-2", "AWS region")
+
+	// ECR subcommands
+	ecrCmd.AddCommand(ecrCreateCmd)
+	ecrCmd.AddCommand(ecrListCmd)
+	ecrCmd.AddCommand(ecrLoginCmd)
+	ecrCmd.AddCommand(ecrDeleteCmd)
+
+	// ECR flags
+	ecrCmd.PersistentFlags().StringVar(&ecrRegion, "region", "us-west-2", "AWS region")
+	ecrDeleteCmd.Flags().BoolVar(&ecrForce, "force", false, "Skip confirmation")
 }
 
 func createDeployer() (*deploy.Deployer, error) {
