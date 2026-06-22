@@ -81,6 +81,8 @@ nav:
       - CLI Commands: reference/cli.md
       - Go API: reference/api.md
       - Extending OmniDeploy: reference/extending.md
+  - Releases:
+      - v0.1.0: releases/v0.1.0.md
 
 extra:
   social:
