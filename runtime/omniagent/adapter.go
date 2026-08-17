@@ -55,12 +55,17 @@ func (a *Adapter) Detect(path string) bool {
 	return hasGateway || hasAgent
 }
 
-// Load loads OmniAgent config and converts to DeployConfig.
+// Load loads OmniAgent config and converts to DeployConfig. Environment
+// variable references (${VAR}, ${VAR:-default}, $$) are expanded first —
+// see config.ExpandEnv. This adapter reads and unmarshals the file itself
+// (rather than going through config.Parse) since it targets a different
+// struct shape (OmniAgentConfig, not DeployConfig).
 func (a *Adapter) Load(path string) (*config.DeployConfig, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("reading config: %w", err)
 	}
+	data = config.ExpandEnv(data)
 
 	var omniCfg OmniAgentConfig
 	if err := yaml.Unmarshal(data, &omniCfg); err != nil {
