@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.43.5
 	github.com/aws/aws-sdk-go-v2/config v1.32.36
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.60.3
-	github.com/aws/aws-sdk-go-v2/service/iam v1.58.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.58.2
 	github.com/pulumi/pulumi-aws/sdk/v6 v6.83.4
 	github.com/pulumi/pulumi/sdk/v3 v3.256.0
 	github.com/spf13/cobra v1.10.2
