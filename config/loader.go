@@ -19,9 +19,13 @@ func Load(path string) (*DeployConfig, error) {
 	return Parse(data, filepath.Ext(path))
 }
 
-// Parse parses deployment configuration from bytes.
+// Parse parses deployment configuration from bytes. Environment variable
+// references (${VAR}, ${VAR:-default}, $$) are expanded first — see
+// ExpandEnv.
 func Parse(data []byte, format string) (*DeployConfig, error) {
 	var cfg DeployConfig
+
+	data = ExpandEnv(data)
 
 	format = strings.TrimPrefix(strings.ToLower(format), ".")
 
