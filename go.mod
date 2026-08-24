@@ -3,7 +3,7 @@ module github.com/plexusone/omnideploy
 go 1.25.11
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.43.6
+	github.com/aws/aws-sdk-go-v2 v1.43.7
 	github.com/aws/aws-sdk-go-v2/config v1.32.37
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.60.6
 	github.com/aws/aws-sdk-go-v2/service/iam v1.59.1
