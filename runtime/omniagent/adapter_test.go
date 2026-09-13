@@ -80,3 +80,44 @@ func TestAdapter_Detect(t *testing.T) {
 		t.Error("Detect() = true for an unrelated config, want false")
 	}
 }
+
+func TestAdapter_Load_PassesThroughDeploySecrets(t *testing.T) {
+	content := `
+gateway:
+  address: "0.0.0.0:8080"
+
+agent:
+  provider: anthropic
+  model: claude-sonnet-5
+
+deploy:
+  name: test-app
+  image: ghcr.io/example/app:latest
+  secrets:
+    - name: ANTHROPIC_API_KEY
+      source: ssm:/test-app/anthropic-api-key
+    - name: OTHER_TOKEN
+      source: secretsmanager:test-app/other-token
+`
+	dir := t.TempDir()
+	path := filepath.Join(dir, "omniagent.yaml")
+	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+		t.Fatalf("write test config: %v", err)
+	}
+
+	a := &Adapter{}
+	cfg, err := a.Load(path)
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	if len(cfg.Secrets) != 2 {
+		t.Fatalf("Secrets = %+v, want 2 refs passed through from deploy.secrets", cfg.Secrets)
+	}
+	if cfg.Secrets[0].Name != "ANTHROPIC_API_KEY" || cfg.Secrets[0].Source != "ssm:/test-app/anthropic-api-key" {
+		t.Errorf("Secrets[0] = %+v, want the ssm: ref verbatim", cfg.Secrets[0])
+	}
+	if cfg.Secrets[1].Source != "secretsmanager:test-app/other-token" {
+		t.Errorf("Secrets[1] = %+v, want the secretsmanager: ref verbatim", cfg.Secrets[1])
+	}
+}
