@@ -120,8 +120,8 @@ func (a *Adapter) convert(cfg *OmniAgentConfig, path string) (*config.DeployConf
 		env[k] = v
 	}
 
-	// Build secrets
-	var secrets []config.SecretRef
+	// Build secrets: explicit deploy.secrets refs pass through verbatim.
+	secrets := append([]config.SecretRef(nil), cfg.Deploy.Secrets...)
 	if cfg.Agent.APIKey != "" && strings.HasPrefix(cfg.Agent.APIKey, "${") {
 		// Environment variable reference - convert to secret
 		envVar := strings.TrimSuffix(strings.TrimPrefix(cfg.Agent.APIKey, "${"), "}")
@@ -204,6 +204,10 @@ type DeploySection struct {
 	Region      string            `yaml:"region"`
 	Replicas    int               `yaml:"replicas"`
 	Environment map[string]string `yaml:"environment"`
+	// Secrets are deploy-time-resolved secret references (env:, ssm:,
+	// secretsmanager:) injected into the container environment as Pulumi
+	// secrets (RMI-OMNIAGENT-006).
+	Secrets []config.SecretRef `yaml:"secrets"`
 	Resources   struct {
 		Size string `yaml:"size"`
 	} `yaml:"resources"`
