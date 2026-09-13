@@ -207,8 +207,8 @@ type DeploySection struct {
 	// Secrets are deploy-time-resolved secret references (env:, ssm:,
 	// secretsmanager:) injected into the container environment as Pulumi
 	// secrets (RMI-OMNIAGENT-006).
-	Secrets []config.SecretRef `yaml:"secrets"`
-	Resources   struct {
+	Secrets   []config.SecretRef `yaml:"secrets"`
+	Resources struct {
 		Size string `yaml:"size"`
 	} `yaml:"resources"`
 }
