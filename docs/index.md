@@ -77,19 +77,19 @@ OmniDeploy uses a pluggable architecture with three main components:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                 Your Application                     │
+│                 Your Application                    │
 │         (OmniAgent, AgentKit, Container)            │
 └─────────────────────────┬───────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────┐
-│              Runtime Adapter                         │
+│              Runtime Adapter                        │
 │    Converts app config → deployment config          │
 └─────────────────────────┬───────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────┐
-│              Deployment Config                       │
+│              Deployment Config                      │
 │     (containers, ports, resources, health)          │
 └─────────────────────────┬───────────────────────────┘
                           │
