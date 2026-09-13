@@ -17,6 +17,7 @@ import (
 
 	"github.com/plexusone/omnideploy/backend"
 	"github.com/plexusone/omnideploy/config"
+	"github.com/plexusone/omnideploy/secrets"
 	"github.com/plexusone/omnideploy/target"
 )
 
@@ -57,8 +58,15 @@ func (b *Backend) Apply(ctx context.Context, spec *target.ResourceSpec, opts bac
 		stackName = spec.StackName
 	}
 
+	// Resolve secret refs up front so a missing secret fails the deploy
+	// before any infrastructure changes (RMI-OMNIAGENT-006).
+	resolved, err := resolveSecrets(ctx, spec)
+	if err != nil {
+		return nil, err
+	}
+
 	// Create the Pulumi program
-	program := b.createProgram(spec)
+	program := b.createProgram(spec, resolved)
 
 	// Create or select the stack
 	stack, err := b.getOrCreateStack(ctx, stackName, spec.Config.Name, program)
@@ -110,7 +118,11 @@ func (b *Backend) Apply(ctx context.Context, spec *target.ResourceSpec, opts bac
 
 // Preview shows what would be provisioned.
 func (b *Backend) Preview(ctx context.Context, spec *target.ResourceSpec) (*backend.PreviewResult, error) {
-	program := b.createProgram(spec)
+	resolved, err := resolveSecrets(ctx, spec)
+	if err != nil {
+		return nil, err
+	}
+	program := b.createProgram(spec, resolved)
 
 	stack, err := b.getOrCreateStack(ctx, spec.StackName, spec.Config.Name, program)
 	if err != nil {
@@ -195,11 +207,11 @@ func (b *Backend) getOrCreateStack(ctx context.Context, stackName, projectName s
 }
 
 // createProgram creates the Pulumi program for the given spec.
-func (b *Backend) createProgram(spec *target.ResourceSpec) pulumi.RunFunc {
+func (b *Backend) createProgram(spec *target.ResourceSpec, resolvedSecrets map[string]string) pulumi.RunFunc {
 	return func(ctx *pulumi.Context) error {
 		switch spec.Target {
 		case "lightsail":
-			return b.deployLightsail(ctx, spec)
+			return b.deployLightsail(ctx, spec, resolvedSecrets)
 		default:
 			return fmt.Errorf("unsupported target: %s", spec.Target)
 		}
@@ -207,7 +219,7 @@ func (b *Backend) createProgram(spec *target.ResourceSpec) pulumi.RunFunc {
 }
 
 // deployLightsail deploys to AWS LightSail.
-func (b *Backend) deployLightsail(ctx *pulumi.Context, spec *target.ResourceSpec) error {
+func (b *Backend) deployLightsail(ctx *pulumi.Context, spec *target.ResourceSpec, resolvedSecrets map[string]string) error {
 	cfg := spec.Config
 
 	// Create container service
@@ -228,7 +240,7 @@ func (b *Backend) deployLightsail(ctx *pulumi.Context, spec *target.ResourceSpec
 			ContainerName: pulumi.String(cfg.Name),
 			Image:         pulumi.String(cfg.Container.Image),
 			Commands:      pulumi.ToStringArray(cfg.Container.Args),
-			Environment:   pulumi.ToStringMap(cfg.Environment),
+			Environment:   buildEnvironment(cfg.Environment, resolvedSecrets),
 			Ports:         buildPortMap(cfg.Container.Ports),
 		},
 	}
@@ -308,4 +320,39 @@ type writerFunc func(string)
 func (f writerFunc) Write(p []byte) (n int, err error) {
 	f(string(p))
 	return len(p), nil
+}
+
+// resolveSecrets resolves spec.Config.Secrets to values (RMI-OMNIAGENT-006).
+// Returns nil when the config declares no secrets so no AWS client is
+// constructed for secret-free deploys.
+func resolveSecrets(ctx context.Context, spec *target.ResourceSpec) (map[string]string, error) {
+	if len(spec.Config.Secrets) == 0 {
+		return nil, nil
+	}
+	resolver, err := secrets.NewResolver(ctx, spec.Region)
+	if err != nil {
+		return nil, fmt.Errorf("building secret resolver: %w", err)
+	}
+	resolved, err := resolver.Resolve(ctx, spec.Config.Secrets)
+	if err != nil {
+		return nil, fmt.Errorf("resolving secrets: %w", err)
+	}
+	return resolved, nil
+}
+
+// buildEnvironment merges plain environment variables with resolved
+// secrets into one container environment map. Secret values are wrapped
+// with pulumi.ToSecret so they are encrypted in Pulumi state rather than
+// stored plaintext; on a name collision the secret wins over the plain
+// entry, so promoting a variable from environment to secrets needs no
+// removal of the old key.
+func buildEnvironment(plain map[string]string, resolvedSecrets map[string]string) pulumi.StringMap {
+	env := make(pulumi.StringMap, len(plain)+len(resolvedSecrets))
+	for k, v := range plain {
+		env[k] = pulumi.String(v)
+	}
+	for k, v := range resolvedSecrets {
+		env[k] = pulumi.ToSecret(pulumi.String(v)).(pulumi.StringOutput)
+	}
+	return env
 }
