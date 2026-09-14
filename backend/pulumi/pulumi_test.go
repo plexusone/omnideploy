@@ -186,11 +186,14 @@ func TestDefaultSystemdUnit(t *testing.T) {
 
 func TestInstallServiceScript(t *testing.T) {
 	inst := testInstanceConfig()
-	script := installServiceScript(inst, defaultSystemdUnit(inst))
+	script := installServiceScript(inst, defaultSystemdUnit(inst), buildRemoteEnvFile(map[string]string{"LOG_LEVEL": "info"}, nil))
 
 	for _, want := range []string{
 		"chmod +x /opt/app",
 		"/etc/systemd/system/app.service",
+		"/opt/app.env",
+		`LOG_LEVEL="info"`,
+		"chmod 600 /opt/app.env",
 		"systemctl daemon-reload",
 		"systemctl enable app",
 		"systemctl restart app",
@@ -202,14 +205,57 @@ func TestInstallServiceScript(t *testing.T) {
 }
 
 func TestRestartServiceScript_DoesNotReinstallUnit(t *testing.T) {
-	script := restartServiceScript(testInstanceConfig())
+	script := restartServiceScript(testInstanceConfig(), buildRemoteEnvFile(map[string]string{"LOG_LEVEL": "info"}, nil))
 
 	if strings.Contains(script, "/etc/systemd/system/") {
 		t.Errorf("restartServiceScript() should not touch the unit file, got:\n%s", script)
 	}
-	for _, want := range []string{"chmod +x /opt/app", "systemctl restart app"} {
+	for _, want := range []string{"chmod +x /opt/app", "/opt/app.env", `LOG_LEVEL="info"`, "systemctl restart app"} {
 		if !strings.Contains(script, want) {
 			t.Errorf("restartServiceScript() missing %q, got:\n%s", want, script)
 		}
+	}
+}
+
+func TestBuildRemoteEnvFile(t *testing.T) {
+	content := buildRemoteEnvFile(
+		map[string]string{"LOG_LEVEL": "info", "API_KEY": "plain-value"},
+		map[string]string{"API_KEY": "secret-value", "TOKEN": `has "quotes" and \backslash`},
+	)
+
+	// Secrets win over plain on a key collision.
+	if !strings.Contains(content, `API_KEY="secret-value"`) {
+		t.Errorf("content = %q, want API_KEY to be the resolved secret value, not the plain one", content)
+	}
+	if !strings.Contains(content, `LOG_LEVEL="info"`) {
+		t.Errorf("content = %q, want LOG_LEVEL from the plain environment", content)
+	}
+	if !strings.Contains(content, `TOKEN="has \"quotes\" and \\backslash"`) {
+		t.Errorf("content = %q, want TOKEN's quotes/backslashes escaped", content)
+	}
+
+	// Deterministic ordering: two calls with the same input produce
+	// byte-identical output, so Triggers doesn't flap between deploys.
+	again := buildRemoteEnvFile(
+		map[string]string{"LOG_LEVEL": "info", "API_KEY": "plain-value"},
+		map[string]string{"API_KEY": "secret-value", "TOKEN": `has "quotes" and \backslash`},
+	)
+	if content != again {
+		t.Errorf("buildRemoteEnvFile() not deterministic:\n%q\nvs\n%q", content, again)
+	}
+}
+
+func TestBuildRemoteEnvFile_Empty(t *testing.T) {
+	if got := buildRemoteEnvFile(nil, nil); got != "" {
+		t.Errorf("buildRemoteEnvFile(nil, nil) = %q, want empty string", got)
+	}
+}
+
+func TestHashString(t *testing.T) {
+	if hashString("a") == hashString("b") {
+		t.Error("hashString(a) == hashString(b), want different hashes for different content")
+	}
+	if hashString("a") != hashString("a") {
+		t.Error("hashString(a) is not stable across calls")
 	}
 }

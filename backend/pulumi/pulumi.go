@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -321,7 +322,7 @@ const instanceSSHUser = "ubuntu"
 // systemd unit and starts the service; Update only restarts it; Triggers
 // is keyed on the binary's content hash plus the unit content so either
 // changing forces a re-run.
-func (b *Backend) deployLightsailInstance(ctx *pulumi.Context, spec *target.ResourceSpec, resolvedSecrets map[string]string) error { //nolint:unparam // resolvedSecrets is wired for the .env injection landing in RMI-OMNIDEPLOY-006 (Phase 2); the createProgram call site requires the same signature as deployLightsail
+func (b *Backend) deployLightsailInstance(ctx *pulumi.Context, spec *target.ResourceSpec, resolvedSecrets map[string]string) error {
 	cfg := spec.Config
 	inst := cfg.Instance
 
@@ -393,11 +394,23 @@ func (b *Backend) deployLightsailInstance(ctx *pulumi.Context, spec *target.Reso
 		unit = defaultSystemdUnit(inst)
 	}
 
+	// envContent carries both plain environment vars and resolved secrets
+	// (RMI-OMNIDEPLOY-006) — it's written to <remote_path>.env on the
+	// instance and consumed by the systemd unit's EnvironmentFile=. Only
+	// its hash (not the content itself) goes into Triggers, and the
+	// scripts that embed it are wrapped in pulumi.ToSecret below, so
+	// secret values never appear in Pulumi state or CLI output.
+	envContent := buildRemoteEnvFile(cfg.Environment, resolvedSecrets)
+	envHash := hashString(envContent)
+
+	createScript := pulumi.ToSecret(pulumi.String(installServiceScript(inst, unit, envContent))).(pulumi.StringOutput)
+	updateScript := pulumi.ToSecret(pulumi.String(restartServiceScript(inst, envContent))).(pulumi.StringOutput)
+
 	if _, err := remote.NewCommand(ctx, cfg.Name+"-service", &remote.CommandArgs{
 		Connection: conn,
-		Create:     pulumi.String(installServiceScript(inst, unit)),
-		Update:     pulumi.String(restartServiceScript(inst)),
-		Triggers:   pulumi.Array{pulumi.String(binaryHash), pulumi.String(unit)},
+		Create:     createScript,
+		Update:     updateScript,
+		Triggers:   pulumi.Array{pulumi.String(binaryHash), pulumi.String(unit), pulumi.String(envHash)},
 	}, pulumi.DependsOn([]pulumi.Resource{artifact})); err != nil {
 		return fmt.Errorf("installing service: %w", err)
 	}
@@ -424,8 +437,52 @@ func binaryContentHash(path string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	sum := sha256.Sum256(data)
-	return hex.EncodeToString(sum[:]), nil
+	return hashString(string(data)), nil
+}
+
+// hashString hashes s for use in remote.Command's Triggers — a one-way
+// digest so a Triggers entry can detect "the .env content changed"
+// without putting secret values themselves into Pulumi state.
+func hashString(s string) string {
+	sum := sha256.Sum256([]byte(s))
+	return hex.EncodeToString(sum[:])
+}
+
+// buildRemoteEnvFile renders systemd EnvironmentFile= syntax (KEY="value"
+// per line, values double-quoted with internal backslashes/quotes
+// escaped so whitespace and special characters survive) from cfg's plain
+// environment plus resolved secrets. Secret values win on a key
+// collision, matching buildEnvironment's precedence for the container
+// target. Keys are sorted for deterministic output — otherwise Pulumi
+// would see a spurious diff (and Triggers hash change) on every deploy
+// from Go's randomized map iteration order alone.
+func buildRemoteEnvFile(plain map[string]string, resolvedSecrets map[string]string) string {
+	merged := make(map[string]string, len(plain)+len(resolvedSecrets))
+	for k, v := range plain {
+		merged[k] = v
+	}
+	for k, v := range resolvedSecrets {
+		merged[k] = v
+	}
+
+	keys := make([]string, 0, len(merged))
+	for k := range merged {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	var b strings.Builder
+	for _, k := range keys {
+		fmt.Fprintf(&b, "%s=%s\n", k, quoteEnvValue(merged[k]))
+	}
+	return b.String()
+}
+
+// quoteEnvValue double-quotes v for a systemd EnvironmentFile, escaping
+// backslashes and double quotes so a value round-trips exactly.
+func quoteEnvValue(v string) string {
+	escaped := strings.NewReplacer(`\`, `\\`, `"`, `\"`).Replace(v)
+	return `"` + escaped + `"`
 }
 
 // defaultSystemdUnit renders a systemd unit for inst when the config
@@ -457,32 +514,49 @@ WantedBy=multi-user.target
 `, inst.ServiceName, inst.RemotePath, inst.RemotePath, path.Dir(inst.RemotePath))
 }
 
+// writeEnvFileScript renders the shell snippet that (re)writes
+// <remote_path>.env from envContent and locks it down to the SSH user —
+// systemd itself still reads it fine via EnvironmentFile= since the
+// service also runs as that user in this target's current single-user
+// model. Shared by installServiceScript and restartServiceScript so a
+// secrets-only change (envContent changes, binary/unit don't) still
+// lands on every redeploy.
+func writeEnvFileScript(inst *config.InstanceConfig, envContent string) string {
+	return fmt.Sprintf(`sudo tee %s.env > /dev/null <<'OMNIDEPLOY_ENV'
+%s
+OMNIDEPLOY_ENV
+sudo chmod 600 %s.env
+`, inst.RemotePath, envContent, inst.RemotePath)
+}
+
 // installServiceScript is remote.Command's Create step: write the
-// systemd unit, make the binary executable, and enable+start the
-// service. Runs once — redeploys use restartServiceScript instead.
-func installServiceScript(inst *config.InstanceConfig, unit string) string {
+// systemd unit and the .env file, make the binary executable, and
+// enable+start the service. Runs once — redeploys use
+// restartServiceScript instead.
+func installServiceScript(inst *config.InstanceConfig, unit, envContent string) string {
 	return fmt.Sprintf(`set -eu
 sudo mkdir -p %s
 sudo chmod +x %s
 sudo tee /etc/systemd/system/%s.service > /dev/null <<'OMNIDEPLOY_UNIT'
 %s
 OMNIDEPLOY_UNIT
-sudo systemctl daemon-reload
+%ssudo systemctl daemon-reload
 sudo systemctl enable %s
 sudo systemctl restart %s
-`, path.Dir(inst.RemotePath), inst.RemotePath, inst.ServiceName, unit, inst.ServiceName, inst.ServiceName)
+`, path.Dir(inst.RemotePath), inst.RemotePath, inst.ServiceName, unit, writeEnvFileScript(inst, envContent), inst.ServiceName, inst.ServiceName)
 }
 
 // restartServiceScript is remote.Command's Update step: the binary was
 // already copied by remote.CopyToRemote by the time this runs, so this
-// only needs to make it executable again and restart the service — no
-// systemd unit reinstall, keeping redeploys fast and idempotent.
-func restartServiceScript(inst *config.InstanceConfig) string {
+// only needs to refresh the .env file, make the binary executable again,
+// and restart the service — no systemd unit reinstall, keeping redeploys
+// fast and idempotent.
+func restartServiceScript(inst *config.InstanceConfig, envContent string) string {
 	return fmt.Sprintf(`set -eu
-sudo chmod +x %s
+%ssudo chmod +x %s
 sudo systemctl daemon-reload
 sudo systemctl restart %s
-`, inst.RemotePath, inst.ServiceName)
+`, writeEnvFileScript(inst, envContent), inst.RemotePath, inst.ServiceName)
 }
 
 // sizeToPower maps size to LightSail power.
