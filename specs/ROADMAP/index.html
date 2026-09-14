@@ -10,13 +10,9 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/omnideploy/getting-started/installation/">
+        <link rel="canonical" href="https://plexusone.github.io/omnideploy/specs/ROADMAP/">
       
       
-        <link rel="prev" href="../..">
-      
-      
-        <link rel="next" href="../aws-setup/">
       
       
         
@@ -27,7 +23,7 @@
     
     
       
-        <title>Installation - OmniDeploy</title>
+        <title>ROADMAP: Lightsail Instance Target - OmniDeploy</title>
       
     
     
@@ -80,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#installation" class="md-skip">
+        <a href="#roadmap-lightsail-instance-target" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              ROADMAP: Lightsail Instance Target
             
           </span>
         </div>
@@ -292,8 +288,6 @@
       
   
   
-    
-  
   
   
     
@@ -306,11 +300,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -331,7 +327,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -346,37 +342,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installation
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
         
   
   
@@ -392,159 +361,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-from-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install from Source
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-from-binary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install from Binary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aws-credentials" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AWS Credentials
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS Credentials">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#option-1-environment-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 1: Environment Variables
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-2-aws-cli-profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 2: AWS CLI Profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-3-iam-role-ec2ecs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 3: IAM Role (EC2/ECS)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pulumi-setup-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi Setup (Optional)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Pulumi Setup (Optional)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pulumi-state-storage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi State Storage
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -557,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../aws-setup/" class="md-nav__link">
+      <a href="../../getting-started/aws-setup/" class="md-nav__link">
         
   
   
@@ -585,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../quickstart/" class="md-nav__link">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
         
   
   
@@ -613,7 +429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../concepts/" class="md-nav__link">
+      <a href="../../getting-started/concepts/" class="md-nav__link">
         
   
   
@@ -1851,10 +1667,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#phase-1-core-vm-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prerequisites
+        Phase 1 — Core VM Target
       
     </span>
   </a>
@@ -1862,10 +1678,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-source" class="md-nav__link">
+  <a href="#phase-2-parity-with-the-container-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from Source
+        Phase 2 — Parity with the Container Target
       
     </span>
   </a>
@@ -1873,110 +1689,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-binary" class="md-nav__link">
+  <a href="#phase-3-migration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from Binary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aws-credentials" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AWS Credentials
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS Credentials">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#option-1-environment-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 1: Environment Variables
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-2-aws-cli-profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 2: AWS CLI Profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-3-iam-role-ec2ecs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 3: IAM Role (EC2/ECS)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pulumi-setup-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi Setup (Optional)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Pulumi Setup (Optional)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pulumi-state-storage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi State Storage
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
+        Phase 3 — Migration
       
     </span>
   </a>
@@ -2003,109 +1719,37 @@
   
 
 
-<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<h1 id="roadmap-lightsail-instance-target">ROADMAP: Lightsail Instance Target<a class="headerlink" href="#roadmap-lightsail-instance-target" title="Permanent link">&para;</a></h1>
+<p><strong>Initiative:</strong> <code>INIT-OMNIDEPLOY-001</code>
+<strong>Status:</strong> Planned</p>
+<blockquote>
+<p>RMI IDs are stable and permanent. Commits implementing an item carry
+the trailer <code>Refs: RMI-OMNIDEPLOY-&lt;NNN&gt;</code>. Phase status is derived from
+member RMIs.</p>
+</blockquote>
+<h2 id="phase-1-core-vm-target">Phase 1 — Core VM Target<a class="headerlink" href="#phase-1-core-vm-target" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Config schema, target registration, and the Pulumi resources
+that make a first deploy and a redeploy both work.</p>
 <ul>
-<li><strong>Go 1.24+</strong> (for installation from source)</li>
-<li><strong>AWS credentials</strong> (for AWS targets)</li>
-<li><strong>Pulumi CLI</strong> (optional, for advanced Pulumi operations)</li>
+<li>[ ] <code>RMI-OMNIDEPLOY-002</code> <code>InstanceConfig</code>/<code>VMHealthCheck</code> config schema</li>
+<li>[ ] <code>RMI-OMNIDEPLOY-003</code> <code>target/lightsailinstance</code> package</li>
+<li>[ ] <code>RMI-OMNIDEPLOY-004</code> <code>deployLightsailInstance</code> (instance, keypair,
+  firewall, redeploy-safe binary shipping)</li>
+<li>[ ] <code>RMI-OMNIDEPLOY-005</code> CLI wiring and unit tests</li>
 </ul>
-<h2 id="install-from-source">Install from Source<a class="headerlink" href="#install-from-source" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>go<span class="w"> </span>install<span class="w"> </span>github.com/plexusone/omnideploy/cmd/omnideploy@latest
-</code></pre></div>
-<p>Verify installation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>omnideploy<span class="w"> </span>--help
-</code></pre></div>
-<h2 id="install-from-binary">Install from Binary<a class="headerlink" href="#install-from-binary" title="Permanent link">&para;</a></h2>
-<p>Download the latest release from <a href="https://github.com/plexusone/omnideploy/releases">GitHub Releases</a>:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">macOS (Apple Silicon)</label><label for="__tabbed_1_2">macOS (Intel)</label><label for="__tabbed_1_3">Linux (x86_64)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/plexusone/omnideploy/releases/latest/download/omnideploy-darwin-arm64.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>xz
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>omnideploy<span class="w"> </span>/usr/local/bin/
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/plexusone/omnideploy/releases/latest/download/omnideploy-darwin-amd64.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>xz
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>omnideploy<span class="w"> </span>/usr/local/bin/
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/plexusone/omnideploy/releases/latest/download/omnideploy-linux-amd64.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>xz
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>omnideploy<span class="w"> </span>/usr/local/bin/
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="aws-credentials">AWS Credentials<a class="headerlink" href="#aws-credentials" title="Permanent link">&para;</a></h2>
-<p>OmniDeploy needs AWS credentials for AWS targets (LightSail, ECS, AgentCore).</p>
-<h3 id="option-1-environment-variables">Option 1: Environment Variables<a class="headerlink" href="#option-1-environment-variables" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span>AKIA...
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span>...
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_REGION</span><span class="o">=</span>us-east-1
-</code></pre></div>
-<h3 id="option-2-aws-cli-profile">Option 2: AWS CLI Profile<a class="headerlink" href="#option-2-aws-cli-profile" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>aws<span class="w"> </span>configure
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># or for a named profile</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>aws<span class="w"> </span>configure<span class="w"> </span>--profile<span class="w"> </span>omnideploy
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_PROFILE</span><span class="o">=</span>omnideploy
-</code></pre></div>
-<h3 id="option-3-iam-role-ec2ecs">Option 3: IAM Role (EC2/ECS)<a class="headerlink" href="#option-3-iam-role-ec2ecs" title="Permanent link">&para;</a></h3>
-<p>If running on AWS infrastructure, use an IAM instance role or task role.</p>
-<h2 id="pulumi-setup-optional">Pulumi Setup (Optional)<a class="headerlink" href="#pulumi-setup-optional" title="Permanent link">&para;</a></h2>
-<p>For the Pulumi backend, you can optionally install the Pulumi CLI:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># macOS</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>brew<span class="w"> </span>install<span class="w"> </span>pulumi
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Linux</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://get.pulumi.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</code></pre></div>
-<p>OmniDeploy uses Pulumi's Automation API and doesn't require the CLI for basic operations, but the CLI is useful for:</p>
+<h2 id="phase-2-parity-with-the-container-target">Phase 2 — Parity with the Container Target<a class="headerlink" href="#phase-2-parity-with-the-container-target" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Secrets injection and post-deploy health verification, matching
+what the container target already has.</p>
 <ul>
-<li>Viewing stack state: <code>pulumi stack</code></li>
-<li>Manual state management: <code>pulumi state</code></li>
-<li>Stack export/import</li>
+<li>[ ] <code>RMI-OMNIDEPLOY-006</code> Secrets via remote <code>.env</code> + systemd
+  <code>EnvironmentFile=</code></li>
+<li>[ ] <code>RMI-OMNIDEPLOY-007</code> HTTP and systemd health-check verification
+  variants</li>
 </ul>
-<h3 id="pulumi-state-storage">Pulumi State Storage<a class="headerlink" href="#pulumi-state-storage" title="Permanent link">&para;</a></h3>
-<p>By default, OmniDeploy stores Pulumi state locally at <code>~/.omnideploy/pulumi/</code>.</p>
-<p>For team collaboration, configure a remote backend:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># AWS S3</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PULUMI_BACKEND_URL</span><span class="o">=</span>s3://my-bucket/pulumi-state
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Pulumi Cloud</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>pulumi<span class="w"> </span>login
-</code></pre></div>
-<h2 id="verify-installation">Verify Installation<a class="headerlink" href="#verify-installation" title="Permanent link">&para;</a></h2>
-<p>Check that everything is working:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Show version</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>omnideploy<span class="w"> </span>version
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># List available targets</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>omnideploy<span class="w"> </span>targets
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># List available backends</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>omnideploy<span class="w"> </span>backends
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># List runtime adapters</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>omnideploy<span class="w"> </span>runtimes
-</code></pre></div>
-<p>Expected output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Available targets:
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  lightsail           AWS LightSail Container Service - simple, cost-effective container hosting
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  lightsail-instance  AWS Lightsail Instance - a persistent VM running a pre-built binary as a systemd service, for deployments needing cheap local disk persistence
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>Available backends:
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  pulumi       Pulumi - Infrastructure as Code using Go
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>Available runtime adapters:
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  omniagent    OmniAgent gateway with web UI
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  container    Generic container deployment
-</code></pre></div>
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../quickstart/">Quick Start</a> - Deploy your first application</li>
-<li><a href="../concepts/">Concepts</a> - Understand how OmniDeploy works</li>
-</ul>
+<h2 id="phase-3-migration">Phase 3 — Migration<a class="headerlink" href="#phase-3-migration" title="Permanent link">&para;</a></h2>
+<p>Not new <code>omnideploy</code> RMIs — updates <code>INIT-GROKIFYOMNIAGENT-001</code>'s
+existing Phase 3/4 RMIs to reference this target instead of hand-rolled
+bash scripts, once Phase 1-2 above are complete.</p>
 
 
 

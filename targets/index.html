@@ -892,6 +892,34 @@
   
   
     <li class="md-nav__item">
+      <a href="lightsail-instance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWS LightSail Instance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="ecs/" class="md-nav__link">
         
   
@@ -1917,6 +1945,12 @@
 <td>Simple apps, cost-effective</td>
 </tr>
 <tr>
+<td><a href="lightsail-instance/">LightSail Instance</a></td>
+<td>✓ Available</td>
+<td>AWS LightSail VM + systemd</td>
+<td>Apps needing local disk persistence</td>
+</tr>
+<tr>
 <td><a href="ecs/">ECS</a></td>
 <td>◐ Planned</td>
 <td>AWS ECS with Fargate</td>
@@ -1959,6 +1993,11 @@
 <td>Manual</td>
 </tr>
 <tr>
+<td>LightSail Instance</td>
+<td>~$5/month</td>
+<td>Manual (single instance)</td>
+</tr>
+<tr>
 <td>ECS Fargate</td>
 <td>~$0.04/vCPU/hour</td>
 <td>Auto</td>
@@ -1976,6 +2015,7 @@
 <tr>
 <th>Feature</th>
 <th>LightSail</th>
+<th>LightSail Instance</th>
 <th>ECS</th>
 <th>Kubernetes</th>
 </tr>
@@ -1984,41 +2024,48 @@
 <tr>
 <td>Auto-scaling</td>
 <td>❌</td>
+<td>❌</td>
 <td>✓</td>
 <td>✓</td>
 </tr>
 <tr>
 <td>Load balancing</td>
 <td>✓ (built-in)</td>
+<td>❌</td>
 <td>✓ (ALB/NLB)</td>
 <td>✓ (Ingress)</td>
 </tr>
 <tr>
 <td>Custom domains</td>
 <td>✓</td>
+<td>❌</td>
 <td>✓</td>
 <td>✓</td>
 </tr>
 <tr>
 <td>SSL/TLS</td>
 <td>✓ (auto)</td>
+<td>❌</td>
 <td>✓ (ACM)</td>
 <td>✓ (cert-manager)</td>
 </tr>
 <tr>
 <td>Persistent storage</td>
 <td>❌</td>
+<td>✓ (included disk)</td>
 <td>✓ (EFS)</td>
 <td>✓ (PVC)</td>
 </tr>
 <tr>
 <td>GPU support</td>
 <td>❌</td>
+<td>❌</td>
 <td>✓</td>
 <td>✓</td>
 </tr>
 <tr>
 <td>Complexity</td>
+<td>Low</td>
 <td>Low</td>
 <td>Medium</td>
 <td>High</td>
@@ -2028,31 +2075,37 @@
 <h3 id="decision-guide">Decision Guide<a class="headerlink" href="#decision-guide" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Start here:
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    ├─► Need simple, predictable pricing?
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    │       └─► LightSail
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    ├─► Need a local file (SQLite, sessions) to survive redeploys?
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    │       └─► LightSail Instance
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    ├─► Need auto-scaling for variable traffic?
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    │       └─► ECS Fargate
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    ├─► Need simple, predictable pricing and no local persistence?
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    │       └─► LightSail
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    ├─► Deploying AI agents to AWS Bedrock?
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    │       └─► AgentCore
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    ├─► Need auto-scaling for variable traffic?
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    │       └─► ECS Fargate
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    ├─► Have existing Kubernetes cluster?
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    │       └─► Kubernetes
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    ├─► Deploying AI agents to AWS Bedrock?
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    │       └─► AgentCore
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    └─► Want simple PaaS outside AWS?
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>            └─► DigitalOcean
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    ├─► Have existing Kubernetes cluster?
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    │       └─► Kubernetes
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    └─► Want simple PaaS outside AWS?
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>            └─► DigitalOcean
 </code></pre></div>
 <h2 id="using-targets">Using Targets<a class="headerlink" href="#using-targets" title="Permanent link">&para;</a></h2>
 <p>Specify target with <code>--target</code> flag:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># LightSail (default)</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml<span class="w"> </span>--target<span class="w"> </span>lightsail
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># ECS</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml<span class="w"> </span>--target<span class="w"> </span>ecs
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># LightSail Instance (persistent disk)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml<span class="w"> </span>--target<span class="w"> </span>lightsail-instance
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Kubernetes</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml<span class="w"> </span>--target<span class="w"> </span>kubernetes
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># ECS</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml<span class="w"> </span>--target<span class="w"> </span>ecs
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Kubernetes</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml<span class="w"> </span>--target<span class="w"> </span>kubernetes
 </code></pre></div>
 <h2 id="target-specific-configuration">Target-Specific Configuration<a class="headerlink" href="#target-specific-configuration" title="Permanent link">&para;</a></h2>
 <p>Some config fields are target-specific:</p>
@@ -2060,22 +2113,31 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">resources</span><span class="p">:</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">micro</span><span class="w">  </span><span class="c1"># nano, micro, small, medium, large, xlarge</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># ECS-specific</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">resources</span><span class="p">:</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span><span class="w">     </span><span class="c1"># Fargate CPU units</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span><span class="w">  </span><span class="c1"># Fargate memory MB</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Kubernetes-specific</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="nt">resources</span><span class="p">:</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">250m</span><span class="w">    </span><span class="c1"># Kubernetes CPU request</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span><span class="w"> </span><span class="c1"># Kubernetes memory request</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># LightSail Instance-specific — uses `instance`, not `container`/`resources`</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">instance</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">blueprint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu_22_04</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">bundle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nano_3_0</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">binary_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./bin/my-app</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">remote_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/my-app/my-app</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">service_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># ECS-specific</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span><span class="w">     </span><span class="c1"># Fargate CPU units</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span><span class="w">  </span><span class="c1"># Fargate memory MB</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Kubernetes-specific</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">250m</span><span class="w">    </span><span class="c1"># Kubernetes CPU request</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256Mi</span><span class="w"> </span><span class="c1"># Kubernetes memory request</span>
 </code></pre></div>
 <h2 id="list-available-targets">List Available Targets<a class="headerlink" href="#list-available-targets" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>omnideploy<span class="w"> </span>targets
 </code></pre></div>
 <p>Output:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Available targets:
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  lightsail    AWS LightSail Container Service - simple, cost-effective container hosting
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  lightsail           AWS LightSail Container Service - simple, cost-effective container hosting
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  lightsail-instance  AWS Lightsail Instance - a persistent VM running a pre-built binary as a systemd service, for deployments needing cheap local disk persistence
 </code></pre></div>
 
 

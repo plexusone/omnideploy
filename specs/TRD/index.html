@@ -10,13 +10,9 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/omnideploy/getting-started/installation/">
+        <link rel="canonical" href="https://plexusone.github.io/omnideploy/specs/TRD/">
       
       
-        <link rel="prev" href="../..">
-      
-      
-        <link rel="next" href="../aws-setup/">
       
       
         
@@ -27,7 +23,7 @@
     
     
       
-        <title>Installation - OmniDeploy</title>
+        <title>TRD: Lightsail Instance Target - OmniDeploy</title>
       
     
     
@@ -80,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#installation" class="md-skip">
+        <a href="#trd-lightsail-instance-target" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Installation
+              TRD: Lightsail Instance Target
             
           </span>
         </div>
@@ -292,8 +288,6 @@
       
   
   
-    
-  
   
   
     
@@ -306,11 +300,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -331,7 +327,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -346,37 +342,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installation
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
         
   
   
@@ -392,159 +361,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-from-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install from Source
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-from-binary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install from Binary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aws-credentials" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AWS Credentials
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS Credentials">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#option-1-environment-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 1: Environment Variables
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-2-aws-cli-profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 2: AWS CLI Profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-3-iam-role-ec2ecs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 3: IAM Role (EC2/ECS)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pulumi-setup-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi Setup (Optional)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Pulumi Setup (Optional)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pulumi-state-storage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi State Storage
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -557,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../aws-setup/" class="md-nav__link">
+      <a href="../../getting-started/aws-setup/" class="md-nav__link">
         
   
   
@@ -585,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../quickstart/" class="md-nav__link">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
         
   
   
@@ -613,7 +429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../concepts/" class="md-nav__link">
+      <a href="../../getting-started/concepts/" class="md-nav__link">
         
   
   
@@ -1851,10 +1667,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prerequisites
+        Architecture
       
     </span>
   </a>
@@ -1862,10 +1678,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-source" class="md-nav__link">
+  <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from Source
+        Dependencies
       
     </span>
   </a>
@@ -1873,10 +1689,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-from-binary" class="md-nav__link">
+  <a href="#config-schema-additions-configtypesgo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install from Binary
+        Config schema additions (config/types.go)
       
     </span>
   </a>
@@ -1884,88 +1700,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aws-credentials" class="md-nav__link">
+  <a href="#redeploy-mechanics-the-core-correctness-requirement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AWS Credentials
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS Credentials">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#option-1-environment-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 1: Environment Variables
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-2-aws-cli-profile" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 2: AWS CLI Profile
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-3-iam-role-ec2ecs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option 3: IAM Role (EC2/ECS)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pulumi-setup-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi Setup (Optional)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Pulumi Setup (Optional)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pulumi-state-storage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi State Storage
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify Installation
+        Redeploy mechanics (the core correctness requirement)
       
     </span>
   </a>
@@ -1973,10 +1711,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
+  <a href="#secrets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Secrets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#firewall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firewall
       
     </span>
   </a>
@@ -2003,109 +1763,107 @@
   
 
 
-<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<h1 id="trd-lightsail-instance-target">TRD: Lightsail Instance Target<a class="headerlink" href="#trd-lightsail-instance-target" title="Permanent link">&para;</a></h1>
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>omnideploy up --target lightsail-instance --config deploy.yaml
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        ▼
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>target/lightsailinstance.Target
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  ├── Validate(cfg)     — bundle/blueprint sanity, RemotePath/ServiceName set
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  └── ResourceSpec(cfg) — target.ResourceSpec{Target: &quot;lightsail-instance&quot;, Config: cfg}
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        ▼
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>backend/pulumi.Backend.Apply
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  ├── resolveSecrets(spec)           — unchanged, RMI-OMNIAGENT-006&#39;s resolver
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  ├── createProgram → deployLightsailInstance(ctx, spec, resolvedSecrets)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  │     ├── lightsail.NewKeyPair              (Pulumi-managed SSH keypair)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  │     ├── lightsail.NewInstance             (BlueprintId, BundleId, AvailabilityZone, KeyPairName)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  │     ├── lightsail.NewInstancePublicPorts   (SSH-only ingress by default)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  │     ├── remote.NewCopyToRemote             (binary + config + rendered .env)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  │     └── remote.NewCommand                  (systemd unit install; Update on redeploy;
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  │                                              Triggers = binary content hash)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  └── verifyHealth(spec, outputs)     — generalized: &quot;http&quot; (healthz.Probe against
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                                         PublicIP:Port+Path) or &quot;systemd&quot; (SSH
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>                                         `systemctl is-active`) per Config.Instance.HealthCheck.Kind
+</code></pre></div>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Go 1.24+</strong> (for installation from source)</li>
-<li><strong>AWS credentials</strong> (for AWS targets)</li>
-<li><strong>Pulumi CLI</strong> (optional, for advanced Pulumi operations)</li>
+<li><code>github.com/pulumi/pulumi-command/sdk/go/command/remote</code> (v1.2.1,
+  verified against pkg.go.dev — not yet an <code>omnideploy</code> dependency) for
+  <code>CopyToRemote</code> and <code>Command</code> (SSH-based remote exec). <code>CopyToRemote</code> is
+  used over the deprecated <code>CopyFile</code>.</li>
+<li><code>github.com/pulumi/pulumi-aws/sdk/v6/go/aws/lightsail</code> (already a
+  dependency) for <code>Instance</code>, <code>InstancePublicPorts</code>, <code>KeyPair</code>.</li>
 </ul>
-<h2 id="install-from-source">Install from Source<a class="headerlink" href="#install-from-source" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>go<span class="w"> </span>install<span class="w"> </span>github.com/plexusone/omnideploy/cmd/omnideploy@latest
+<h2 id="config-schema-additions-configtypesgo">Config schema additions (<code>config/types.go</code>)<a class="headerlink" href="#config-schema-additions-configtypesgo" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">DeployConfig</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="c1">// ... existing fields ...</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">Container</span><span class="w"> </span><span class="nx">ContainerConfig</span><span class="w"> </span><span class="s">`yaml:&quot;container,omitempty&quot; json:&quot;container,omitempty&quot;`</span><span class="w"> </span><span class="c1">// was required; now omitempty</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">Instance</span><span class="w">  </span><span class="o">*</span><span class="nx">InstanceConfig</span><span class="w"> </span><span class="s">`yaml:&quot;instance,omitempty&quot; json:&quot;instance,omitempty&quot;`</span><span class="w">    </span><span class="c1">// new</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kd">type</span><span class="w"> </span><span class="nx">InstanceConfig</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">Blueprint</span><span class="w">   </span><span class="kt">string</span><span class="w">         </span><span class="s">`yaml:&quot;blueprint&quot;`</span><span class="w">    </span><span class="c1">// e.g. &quot;ubuntu_22_04&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nx">Bundle</span><span class="w">      </span><span class="kt">string</span><span class="w">         </span><span class="s">`yaml:&quot;bundle&quot;`</span><span class="w">        </span><span class="c1">// Lightsail bundle id, e.g. &quot;nano_3_0&quot;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nx">BinaryPath</span><span class="w">  </span><span class="kt">string</span><span class="w">         </span><span class="s">`yaml:&quot;binary_path&quot;`</span><span class="w">   </span><span class="c1">// local path to the pre-built binary</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nx">RemotePath</span><span class="w">  </span><span class="kt">string</span><span class="w">         </span><span class="s">`yaml:&quot;remote_path&quot;`</span><span class="w">   </span><span class="c1">// e.g. &quot;/opt/omniagent&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nx">ServiceName</span><span class="w"> </span><span class="kt">string</span><span class="w">         </span><span class="s">`yaml:&quot;service_name&quot;`</span><span class="w">  </span><span class="c1">// systemd unit name</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nx">SystemdUnit</span><span class="w"> </span><span class="kt">string</span><span class="w">         </span><span class="s">`yaml:&quot;systemd_unit,omitempty&quot;`</span><span class="w"> </span><span class="c1">// optional override</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nx">HealthCheck</span><span class="w"> </span><span class="o">*</span><span class="nx">VMHealthCheck</span><span class="w"> </span><span class="s">`yaml:&quot;health_check,omitempty&quot;`</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="kd">type</span><span class="w"> </span><span class="nx">VMHealthCheck</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="nx">Kind</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`yaml:&quot;kind&quot;`</span><span class="w"> </span><span class="c1">// &quot;http&quot; | &quot;systemd&quot;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="nx">Path</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`yaml:&quot;path,omitempty&quot;`</span><span class="w"> </span><span class="c1">// http only</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="nx">Port</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="s">`yaml:&quot;port,omitempty&quot;`</span><span class="w"> </span><span class="c1">// http only</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="p">}</span>
 </code></pre></div>
-<p>Verify installation:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>omnideploy<span class="w"> </span>--help
-</code></pre></div>
-<h2 id="install-from-binary">Install from Binary<a class="headerlink" href="#install-from-binary" title="Permanent link">&para;</a></h2>
-<p>Download the latest release from <a href="https://github.com/plexusone/omnideploy/releases">GitHub Releases</a>:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">macOS (Apple Silicon)</label><label for="__tabbed_1_2">macOS (Intel)</label><label for="__tabbed_1_3">Linux (x86_64)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/plexusone/omnideploy/releases/latest/download/omnideploy-darwin-arm64.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>xz
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>omnideploy<span class="w"> </span>/usr/local/bin/
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/plexusone/omnideploy/releases/latest/download/omnideploy-darwin-amd64.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>xz
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>omnideploy<span class="w"> </span>/usr/local/bin/
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/plexusone/omnideploy/releases/latest/download/omnideploy-linux-amd64.tar.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>tar<span class="w"> </span>xz
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>mv<span class="w"> </span>omnideploy<span class="w"> </span>/usr/local/bin/
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="aws-credentials">AWS Credentials<a class="headerlink" href="#aws-credentials" title="Permanent link">&para;</a></h2>
-<p>OmniDeploy needs AWS credentials for AWS targets (LightSail, ECS, AgentCore).</p>
-<h3 id="option-1-environment-variables">Option 1: Environment Variables<a class="headerlink" href="#option-1-environment-variables" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span>AKIA...
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span>...
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_REGION</span><span class="o">=</span>us-east-1
-</code></pre></div>
-<h3 id="option-2-aws-cli-profile">Option 2: AWS CLI Profile<a class="headerlink" href="#option-2-aws-cli-profile" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>aws<span class="w"> </span>configure
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># or for a named profile</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>aws<span class="w"> </span>configure<span class="w"> </span>--profile<span class="w"> </span>omnideploy
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_PROFILE</span><span class="o">=</span>omnideploy
-</code></pre></div>
-<h3 id="option-3-iam-role-ec2ecs">Option 3: IAM Role (EC2/ECS)<a class="headerlink" href="#option-3-iam-role-ec2ecs" title="Permanent link">&para;</a></h3>
-<p>If running on AWS infrastructure, use an IAM instance role or task role.</p>
-<h2 id="pulumi-setup-optional">Pulumi Setup (Optional)<a class="headerlink" href="#pulumi-setup-optional" title="Permanent link">&para;</a></h2>
-<p>For the Pulumi backend, you can optionally install the Pulumi CLI:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># macOS</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>brew<span class="w"> </span>install<span class="w"> </span>pulumi
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Linux</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://get.pulumi.com<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</code></pre></div>
-<p>OmniDeploy uses Pulumi's Automation API and doesn't require the CLI for basic operations, but the CLI is useful for:</p>
+<p><code>Name</code>/<code>Region</code>/<code>Environment</code>/<code>Secrets</code>/<code>Tags</code> on <code>DeployConfig</code> are
+reused unchanged. <code>Container</code> becomes optional (only one of
+<code>Container</code>/<code>Instance</code> is expected to be set per deploy; <code>Validate</code>
+rejects both-set or neither-set).</p>
+<h2 id="redeploy-mechanics-the-core-correctness-requirement">Redeploy mechanics (the core correctness requirement)<a class="headerlink" href="#redeploy-mechanics-the-core-correctness-requirement" title="Permanent link">&para;</a></h2>
+<p><code>lightsail.Instance</code>'s <code>UserData</code> field is cloud-init and <strong>only runs
+once, at first boot</strong> — it cannot be used for redeploys. The target
+instead uses <code>remote.Command</code>'s <code>Create</code>/<code>Update</code> pair:</p>
 <ul>
-<li>Viewing stack state: <code>pulumi stack</code></li>
-<li>Manual state management: <code>pulumi state</code></li>
-<li>Stack export/import</li>
+<li><code>Create</code>: install systemd unit, <code>daemon-reload</code>, <code>enable</code>, <code>start</code>.</li>
+<li><code>Update</code>: <code>daemon-reload &amp;&amp; restart</code> (the binary/config were already
+  refreshed by the preceding <code>CopyToRemote</code>, which itself re-runs when
+  its <code>Source</code> content changes).</li>
+<li><code>Triggers</code>: a hash of the binary's content, so Pulumi only re-runs the
+  command when the binary actually changed — a no-op <code>up</code> with an
+  unchanged binary does not restart the service.</li>
 </ul>
-<h3 id="pulumi-state-storage">Pulumi State Storage<a class="headerlink" href="#pulumi-state-storage" title="Permanent link">&para;</a></h3>
-<p>By default, OmniDeploy stores Pulumi state locally at <code>~/.omnideploy/pulumi/</code>.</p>
-<p>For team collaboration, configure a remote backend:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># AWS S3</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PULUMI_BACKEND_URL</span><span class="o">=</span>s3://my-bucket/pulumi-state
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Pulumi Cloud</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>pulumi<span class="w"> </span>login
-</code></pre></div>
-<h2 id="verify-installation">Verify Installation<a class="headerlink" href="#verify-installation" title="Permanent link">&para;</a></h2>
-<p>Check that everything is working:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Show version</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>omnideploy<span class="w"> </span>version
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># List available targets</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>omnideploy<span class="w"> </span>targets
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># List available backends</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>omnideploy<span class="w"> </span>backends
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># List runtime adapters</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>omnideploy<span class="w"> </span>runtimes
-</code></pre></div>
-<p>Expected output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Available targets:
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  lightsail           AWS LightSail Container Service - simple, cost-effective container hosting
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  lightsail-instance  AWS Lightsail Instance - a persistent VM running a pre-built binary as a systemd service, for deployments needing cheap local disk persistence
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>Available backends:
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  pulumi       Pulumi - Infrastructure as Code using Go
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>Available runtime adapters:
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  omniagent    OmniAgent gateway with web UI
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  container    Generic container deployment
-</code></pre></div>
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>This reproduces <code>deploy.sh</code>'s <code>scp</code> + <code>ssh systemctl restart</code> sequence
+declaratively, gated by Pulumi's own change-detection instead of always
+running unconditionally.</p>
+<h2 id="secrets">Secrets<a class="headerlink" href="#secrets" title="Permanent link">&para;</a></h2>
+<p>Reuses the <code>env:</code>/<code>ssm:</code>/<code>secretsmanager:</code> resolver unchanged (same
+<code>resolveSecrets</code> call already in <code>Apply</code>). Injection differs: resolved
+values are rendered into a <code>.env</code> file (<code>KEY=value</code> lines) shipped via
+the same <code>CopyToRemote</code> step, and the systemd unit references it via
+<code>EnvironmentFile=&lt;RemotePath&gt;/.env</code> — mirroring <code>setup.sh</code>'s existing
+<code>EnvironmentFile=/opt/omniagent/.env</code> pattern exactly.</p>
+<h2 id="health-verification">Health verification<a class="headerlink" href="#health-verification" title="Permanent link">&para;</a></h2>
+<p>Generalizes <code>RMI-OMNIDEPLOY-001</code>'s <code>verifyHealth</code>/<code>verifyHealthRetry</code>:</p>
 <ul>
-<li><a href="../quickstart/">Quick Start</a> - Deploy your first application</li>
-<li><a href="../concepts/">Concepts</a> - Understand how OmniDeploy works</li>
+<li><code>Kind == "http"</code>: unchanged — <code>healthz.Probe</code> against
+  <code>http://&lt;PublicIpAddress&gt;:&lt;Port&gt;&lt;Path&gt;</code>.</li>
+<li><code>Kind == "systemd"</code> (new): a <code>remote.Command</code> (or direct SSH exec via
+  the same <code>Connection</code>) running <code>systemctl is-active --quiet
+  &lt;ServiceName&gt;</code>, retried with the same backoff shape as
+  <code>verifyHealthRetry</code>. Needed for tools with no HTTP surface at all
+  (e.g. a scheduled report generator).</li>
+<li><code>Config.Instance.HealthCheck == nil</code>: skip verification entirely
+  (documented no-op, same convention as the container path when no
+  health check is configured).</li>
 </ul>
+<h2 id="firewall">Firewall<a class="headerlink" href="#firewall" title="Permanent link">&para;</a></h2>
+<p><code>lightsail.InstancePublicPorts</code> defaults to SSH (22) only. An optional
+app port (for the <code>Kind == "http"</code> health-check case, or an app that
+itself serves traffic) is opened only when <code>VMHealthCheck.Port</code> is set —
+keeps the default posture minimal.</p>
 
 
 
