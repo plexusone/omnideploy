@@ -13,6 +13,7 @@ A **target** defines the cloud platform and service where your container runs.
 | Target | Description | Best For |
 |--------|-------------|----------|
 | `lightsail` | AWS LightSail Container Service | Simple apps, cost-effective |
+| `lightsail-instance` | AWS LightSail VM + systemd | Apps needing local disk persistence |
 | `ecs` | AWS ECS with Fargate | Production workloads, auto-scaling |
 | `agentcore` | AWS Bedrock AgentCore | AI agent deployments |
 | `kubernetes` | Any Kubernetes cluster | Complex orchestration |

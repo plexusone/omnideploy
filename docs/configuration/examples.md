@@ -242,6 +242,81 @@ environment:
   NEXTAUTH_URL: https://app.example.com
 ```
 
+## Persistent / Stateful Applications
+
+These use the [LightSail Instance target](../targets/lightsail-instance.md) — `instance:` instead of `container:` — for workloads that need a local file to survive a redeploy. The container-based targets above have no persistent disk.
+
+### Discord Bot with Local SQLite Memory
+
+```yaml
+name: my-discord-bot
+region: us-west-2
+
+instance:
+  blueprint: ubuntu_22_04
+  bundle: nano_3_0
+  binary_path: ./bin/my-discord-bot
+  remote_path: /opt/my-discord-bot/my-discord-bot
+  service_name: my-discord-bot
+
+  # Grant write access to /data (where the SQLite files live) in
+  # addition to the binary's own directory.
+  systemd_unit: |
+    [Unit]
+    Description=my-discord-bot
+    After=network.target
+
+    [Service]
+    Type=simple
+    ExecStart=/opt/my-discord-bot/my-discord-bot
+    Restart=on-failure
+    RestartSec=5
+    EnvironmentFile=-/opt/my-discord-bot/my-discord-bot.env
+    NoNewPrivileges=true
+    ProtectSystem=strict
+    ProtectHome=true
+    ReadWritePaths=/data /opt/my-discord-bot
+
+    [Install]
+    WantedBy=multi-user.target
+
+  # No HTTP surface — Discord is outbound-only, so verify via systemd
+  # instead and leave the firewall SSH-only.
+  health_check:
+    kind: systemd
+
+environment:
+  STORAGE_PATH: /data/omniagent.db
+  MEMORY_PATH: /data/memories.db
+
+secrets:
+  - name: DISCORD_BOT_TOKEN
+    source: ssm:/my-discord-bot/discord-token
+  - name: ANTHROPIC_API_KEY
+    source: ssm:/my-discord-bot/anthropic-key
+```
+
+### Simple HTTP Service with Persistent State
+
+```yaml
+name: my-api
+region: us-west-2
+
+instance:
+  blueprint: ubuntu_22_04
+  bundle: micro_3_0
+  binary_path: ./bin/my-api
+  remote_path: /opt/my-api/my-api
+  service_name: my-api
+  health_check:
+    kind: http
+    path: /health
+    port: 8080
+
+environment:
+  STORAGE_PATH: /opt/my-api/data.db
+```
+
 ## Multi-Environment Setup
 
 ### Development

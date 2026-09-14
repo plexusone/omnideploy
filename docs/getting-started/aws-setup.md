@@ -58,6 +58,23 @@ OmniDeploy needs permissions for the deployment target and container registry.
 | `lightsail:DeleteContainerService` | Destroy resources |
 | `lightsail:UpdateContainerService` | Update configuration |
 
+### LightSail Instance Target
+
+`AmazonLightsailFullAccess` (below) already covers this target too — these are the specific actions if you're building a least-privilege policy instead:
+
+| Permission | Purpose |
+|------------|---------|
+| `lightsail:CreateKeyPair` | Create the SSH keypair used to install/update the service |
+| `lightsail:DeleteKeyPair` | Destroy resources |
+| `lightsail:GetKeyPair`, `lightsail:GetKeyPairs` | Check keypair status |
+| `lightsail:CreateInstances` | Create the VM |
+| `lightsail:GetInstance`, `lightsail:GetInstances`, `lightsail:GetInstanceState` | Check instance status |
+| `lightsail:DeleteInstance` | Destroy resources |
+| `lightsail:TagResource`, `lightsail:UntagResource` | Apply `tags` from config |
+| `lightsail:PutInstancePublicPorts`, `lightsail:GetInstancePortStates` | Configure the firewall |
+
+Deployment itself (shipping the binary, installing the systemd service) happens over SSH using the keypair OmniDeploy provisions — no additional AWS permission is needed for that part.
+
 ### ECR (Container Registry)
 
 | Permission | Purpose |
@@ -128,6 +145,26 @@ For production, create a custom policy with minimal permissions:
         "lightsail:GetContainerLog",
         "lightsail:RegisterContainerImage",
         "lightsail:UpdateContainerService"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "LightSailInstances",
+      "Effect": "Allow",
+      "Action": [
+        "lightsail:CreateKeyPair",
+        "lightsail:DeleteKeyPair",
+        "lightsail:GetKeyPair",
+        "lightsail:GetKeyPairs",
+        "lightsail:CreateInstances",
+        "lightsail:GetInstance",
+        "lightsail:GetInstances",
+        "lightsail:GetInstanceState",
+        "lightsail:DeleteInstance",
+        "lightsail:TagResource",
+        "lightsail:UntagResource",
+        "lightsail:PutInstancePublicPorts",
+        "lightsail:GetInstancePortStates"
       ],
       "Resource": "*"
     },

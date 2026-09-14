@@ -122,7 +122,8 @@ Expected output:
 
 ```
 Available targets:
-  lightsail    AWS LightSail Container Service - simple, cost-effective container hosting
+  lightsail           AWS LightSail Container Service - simple, cost-effective container hosting
+  lightsail-instance  AWS Lightsail Instance - a persistent VM running a pre-built binary as a systemd service, for deployments needing cheap local disk persistence
 
 Available backends:
   pulumi       Pulumi - Infrastructure as Code using Go

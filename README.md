@@ -31,17 +31,13 @@ Universal deployment tool for container applications. Deploy to any cloud provid
 
 OmniDeploy separates **where** you deploy (targets) from **how** you provision (backends):
 
-```
-                    Backend (HOW to provision)
-                    ┌─────────┬─────────┬───────────┐
-                    │ Pulumi  │   CDK   │ Terraform │
-        ┌───────────┼─────────┼─────────┼───────────┤
-        │ LightSail │    ✓    │    -    │     -     │
-Target  │ ECS       │    -    │    -    │     -     │
-(WHERE) │ AgentCore │    -    │    -    │     -     │
-        │ Kubernetes│    -    │    -    │     -     │
-        └───────────┴─────────┴─────────┴───────────┘
-```
+| Target (WHERE) | Pulumi | CDK | Terraform |
+|---|:---:|:---:|:---:|
+| LightSail | ✓ | - | - |
+| LightSail Instance | ✓ | - | - |
+| ECS | - | - | - |
+| AgentCore | - | - | - |
+| Kubernetes | - | - | - |
 
 ## Installation
 
@@ -212,6 +208,26 @@ Cost-effective container hosting with simple scaling.
 | medium | 2 | 4 GB | ~$50 |
 | large | 4 | 8 GB | ~$100 |
 | xlarge | 8 | 16 GB | ~$200 |
+
+### AWS LightSail Instance
+
+A persistent VM running your binary as a systemd service — for anything that needs a local file (SQLite, sessions) to survive a redeploy, which LightSail Container Service can't provide (no persistent disk). See the [full target docs](docs/targets/lightsail-instance.md) for configuration and health-check details.
+
+```yaml
+name: my-bot
+region: us-west-2
+
+instance:
+  blueprint: ubuntu_22_04
+  bundle: nano_3_0
+  binary_path: ./bin/my-bot
+  remote_path: /opt/my-bot/my-bot
+  service_name: my-bot
+```
+
+```bash
+omnideploy up --config deploy.yaml --target lightsail-instance
+```
 
 ## Backends
 

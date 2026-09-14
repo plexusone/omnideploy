@@ -8,24 +8,20 @@ Deploy to any cloud provider using any Infrastructure as Code tool.
 
 OmniDeploy separates **where** you deploy (targets) from **how** you provision (backends), giving you flexibility to choose the best combination for your needs.
 
-```
-                    Backend (HOW to provision)
-                    ┌─────────┬─────────┬───────────┐
-                    │ Pulumi  │   CDK   │ Terraform │
-        ┌───────────┼─────────┼─────────┼───────────┤
-        │ LightSail │    ✓    │    ◐    │     ◐     │
-Target  │ ECS       │    ◐    │    ◐    │     ◐     │
-(WHERE) │ AgentCore │    ◐    │    ◐    │     ◐     │
-        │ Kubernetes│    ◐    │    -    │     ◐     │
-        │ DigitalOcean│  ◐    │    -    │     ◐     │
-        └───────────┴─────────┴─────────┴───────────┘
+| Target (WHERE) | Pulumi | CDK | Terraform |
+|---|:---:|:---:|:---:|
+| LightSail | ✓ | ◐ | ◐ |
+| LightSail Instance | ✓ | ◐ | ◐ |
+| ECS | ◐ | ◐ | ◐ |
+| AgentCore | ◐ | ◐ | ◐ |
+| Kubernetes | ◐ | - | ◐ |
+| DigitalOcean | ◐ | - | ◐ |
 
-✓ = Available  ◐ = Planned  - = Not applicable
-```
+✓ = Available &nbsp;&nbsp; ◐ = Planned &nbsp;&nbsp; - = Not applicable
 
 ## Key Features
 
-- **Multi-Target**: Deploy to AWS LightSail, ECS, Kubernetes, DigitalOcean, and more
+- **Multi-Target**: Deploy to AWS LightSail (container or persistent VM instance), ECS, Kubernetes, DigitalOcean, and more
 - **Multi-Backend**: Use Pulumi, AWS CDK, or Terraform as your IaC tool
 - **Runtime Adapters**: Auto-detect OmniAgent, AgentKit, or generic container configs
 - **Simple CLI**: One command to deploy, preview, or destroy

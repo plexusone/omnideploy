@@ -178,7 +178,8 @@ deployer := deploy.New(
 |---------|-------------|
 | `config` | Configuration types and loading |
 | `target` | Target interface and registry |
-| `target/lightsail` | LightSail implementation |
+| `target/lightsail` | LightSail (Container Service) implementation |
+| `target/lightsailinstance` | LightSail Instance (VM + systemd) implementation |
 | `backend` | Backend interface and registry |
 | `backend/pulumi` | Pulumi implementation |
 | `runtime` | Runtime adapter interface |

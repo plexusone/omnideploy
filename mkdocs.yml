@@ -58,6 +58,7 @@ nav:
   - Targets:
       - Overview: targets/index.md
       - AWS LightSail: targets/lightsail.md
+      - AWS LightSail Instance: targets/lightsail-instance.md
       - AWS ECS: targets/ecs.md
       - AWS AgentCore: targets/agentcore.md
       - Kubernetes: targets/kubernetes.md

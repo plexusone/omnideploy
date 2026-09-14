@@ -212,6 +212,7 @@ omnideploy up --config deploy.yaml --stack my-app
 The Pulumi backend supports:
 
 - ✓ AWS LightSail
+- ✓ AWS LightSail Instance
 - ◐ AWS ECS (planned)
 - ◐ AWS AgentCore (planned)
 - ◐ Kubernetes (planned)

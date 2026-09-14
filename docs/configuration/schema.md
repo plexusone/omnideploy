@@ -23,9 +23,11 @@ version: "1.0.0"
 region: us-east-1
 
 # =============================================================================
-# CONTAINER
+# CONTAINER (exactly one of `container` or `instance` — see below)
 # =============================================================================
 
+# Used by container-based targets (lightsail, ecs, kubernetes, ...).
+# Omit entirely when using `instance` (the lightsail-instance target).
 container:
   # Required: Container image URL
   image: nginx:latest
@@ -56,6 +58,45 @@ container:
     timeout: 5s               # Timeout per check (default: 5s)
     healthy_threshold: 2      # Consecutive successes (default: 2)
     unhealthy_threshold: 3    # Consecutive failures (default: 3)
+
+# =============================================================================
+# INSTANCE (exactly one of `container` or `instance` — see below)
+# =============================================================================
+
+# Only for the lightsail-instance target — a persistent VM instead of a
+# container. Omit entirely when using `container`.
+instance:
+  # Required: Lightsail blueprint ID, e.g. "ubuntu_22_04"
+  blueprint: ubuntu_22_04
+
+  # Required: Lightsail bundle ID, e.g. "nano_3_0" — not validated
+  # locally (the bundle catalog changes over time); an invalid value
+  # surfaces as an AWS API error during `omnideploy up`.
+  bundle: nano_3_0
+
+  # Required: local path to the pre-built binary (cross-compiled
+  # beforehand, e.g. CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build)
+  binary_path: ./bin/my-app
+
+  # Required: path on the instance where the binary is installed and run
+  remote_path: /opt/my-app/my-app
+
+  # Required: systemd service name
+  service_name: my-app
+
+  # Optional: override the generated systemd unit entirely. The default
+  # unit grants ReadWritePaths only on remote_path's own directory —
+  # override this to add e.g. a separate /data volume.
+  systemd_unit: null
+
+  # Optional: post-deploy health verification. Omit to skip verification
+  # entirely (useful for outbound-only workloads like Discord bots).
+  health_check:
+    kind: http           # "http" or "systemd"
+    path: /health         # required when kind is http
+    port: 8080            # required when kind is http; also opens this
+                           # port in the instance firewall (SSH-only by
+                           # default)
 
 # =============================================================================
 # SERVICE
@@ -141,7 +182,8 @@ tags:
 | `name` | string | Yes | - | Deployment name (alphanumeric, hyphens) |
 | `version` | string | No | - | Version string for tracking |
 | `region` | string | No | `us-east-1` | Cloud region |
-| `container` | object | Yes | - | Container configuration |
+| `container` | object | Exactly one of `container`/`instance` | - | Container configuration |
+| `instance` | object | Exactly one of `container`/`instance` | - | VM instance configuration (lightsail-instance target only) |
 | `service` | object | No | - | Service configuration |
 | `resources` | object | No | - | Resource allocation |
 | `environment` | map | No | - | Environment variables |
@@ -177,6 +219,30 @@ tags:
 | `timeout` | duration | No | `5s` | Check timeout |
 | `healthy_threshold` | int | No | `2` | Consecutive successes |
 | `unhealthy_threshold` | int | No | `3` | Consecutive failures |
+
+### Instance Fields
+
+*(lightsail-instance target only)*
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `blueprint` | string | Yes | - | Lightsail blueprint ID (e.g. `ubuntu_22_04`) |
+| `bundle` | string | Yes | - | Lightsail bundle ID (e.g. `nano_3_0`); not validated locally |
+| `binary_path` | string | Yes | - | Local path to the pre-built binary |
+| `remote_path` | string | Yes | - | Path on the instance where the binary is installed |
+| `service_name` | string | Yes | - | systemd service name |
+| `systemd_unit` | string | No | Generated | Override the generated systemd unit |
+| `health_check` | object | No | - | VM health check config |
+
+### VM Health Check Fields
+
+*(lightsail-instance target only — distinct from the container target's `health_check`)*
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `kind` | string | Yes | - | `http` or `systemd` |
+| `path` | string | Required when `kind` is `http` | - | HTTP path to probe |
+| `port` | int | Required when `kind` is `http` | - | Port to probe; also opened in the instance firewall |
 
 ### Service Fields
 
@@ -248,9 +314,8 @@ resources:
 OmniDeploy validates configurations before deployment:
 
 - `name` must be alphanumeric with hyphens
-- `container.image` is required
-- At least one `container.ports` entry is required
-- `container_port` must be 1-65535
-- `service.replicas` must be non-negative
+- Exactly one of `container`/`instance` must be set
+- When using `container`: `container.image` is required, at least one `container.ports` entry is required, `container_port` must be 1-65535, `service.replicas` must be non-negative
+- When using `instance`: `blueprint`, `bundle`, `binary_path`, `remote_path`, and `service_name` are all required; if `health_check` is set, `kind` must be `http` or `systemd`, and `http` additionally requires `path` and a valid `port`
 
 Use `omnideploy preview` to catch validation errors before deploying.
