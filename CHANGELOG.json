@@ -7,6 +7,141 @@
   "maintainers": ["plexusone"],
   "releases": [
     {
+      "version": "v0.2.0",
+      "date": "2026-09-14",
+      "highlights": [
+        {
+          "description": "New `lightsail-instance` target: a persistent AWS Lightsail VM running your binary as a systemd service, for workloads that need a local file (SQLite, sessions) to survive a redeploy — something the LightSail Container Service target can't provide"
+        },
+        {
+          "description": "Deploy-time secret resolution (`SecretRef`) wired through the runtime adapter and into the LightSail target, plus a remote `.env`/systemd `EnvironmentFile=` injection path for the new instance target"
+        },
+        {
+          "description": "Post-deploy health verification: an HTTP retry probe after a deployment reaches ACTIVE, plus a systemd `is-active` retry loop for the instance target's non-HTTP workloads"
+        }
+      ],
+      "added": [
+        {
+          "description": "`instance`/`health_check` config schema for VM deployments (`InstanceConfig`, `VMHealthCheck`)",
+          "commit": "3d94feb"
+        },
+        {
+          "description": "`target/lightsailinstance`: register the `lightsail-instance` target",
+          "commit": "4bb1938"
+        },
+        {
+          "description": "`lightsail-instance` Pulumi resource graph: instance, SSH keypair, SSH-only firewall, redeploy-safe binary shipping and systemd install/restart",
+          "commit": "87d524b"
+        },
+        {
+          "description": "Secrets and environment variables injected into the `lightsail-instance` target via a remote `.env` + systemd `EnvironmentFile=`",
+          "commit": "bc86724"
+        },
+        {
+          "description": "HTTP and systemd health-check verification variants for the `lightsail-instance` target",
+          "commit": "1535f0b"
+        },
+        {
+          "description": "Post-deploy health verification (HTTP retry probe) after a deployment reaches `ACTIVE`",
+          "commit": "0572d67"
+        },
+        {
+          "description": "Deploy-time `SecretRef` resolver (`ssm:`, `secretsmanager:` sources)",
+          "commit": "d2d23b9"
+        },
+        {
+          "description": "Resolve and inject config secrets into the LightSail (container) target",
+          "commit": "f76147b"
+        },
+        {
+          "description": "Pass `deploy.secrets` through the runtime adapter",
+          "commit": "72fe714"
+        },
+        {
+          "description": "Implement documented `${VAR}`/`${VAR:-default}` environment variable expansion in config parsing",
+          "commit": "9e29d55"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "Make runtime adapter `Detect()` resolution deterministic",
+          "commit": "1f76e7f"
+        },
+        {
+          "description": "Add proper error handling for previously-unchecked errors",
+          "commit": "763f1f9"
+        }
+      ],
+      "changed": [
+        {
+          "description": "Return errors instead of logging for recoverable failures",
+          "commit": "1649fd8"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "PRD/TRD/PLAN/ROADMAP specs for the Lightsail Instance target initiative",
+          "commit": "437d51d"
+        },
+        {
+          "description": "Document the `lightsail-instance` target across the MkDocs site and README (new target page, schema/example/comparison updates, IAM permissions)",
+          "commit": "299c093"
+        },
+        {
+          "description": "`docs/index.md`: formatting cleanup",
+          "commit": "bb3ad75"
+        },
+        {
+          "description": "`README.md`: update shields",
+          "commit": "22cfe2e"
+        }
+      ],
+      "dependencies": [
+        {
+          "description": "bump `github.com/aws/aws-sdk-go-v2` from v1.42.0 to v1.47.0",
+          "commit": "68be951"
+        },
+        {
+          "description": "bump `github.com/aws/aws-sdk-go-v2/config` from v1.32.25 to v1.33.4",
+          "commit": "267265a"
+        },
+        {
+          "description": "bump `github.com/aws/aws-sdk-go-v2/service/ecr` from v1.58.4 to v1.65.0",
+          "commit": "072a187"
+        },
+        {
+          "description": "bump `github.com/aws/aws-sdk-go-v2/service/iam` from v1.54.5 to v1.64.0",
+          "commit": "892ec96"
+        },
+        {
+          "description": "bump `github.com/pulumi/pulumi/sdk/v3` from v3.247.0 to v3.262.0",
+          "commit": "ab47b6b"
+        },
+        {
+          "description": "add `github.com/aws/aws-sdk-go-v2/service/secretsmanager` v1.49.0 (SecretRef resolver)",
+          "commit": "d2d23b9"
+        },
+        {
+          "description": "add `github.com/aws/aws-sdk-go-v2/service/ssm` v1.78.0 (SecretRef resolver)",
+          "commit": "d2d23b9"
+        },
+        {
+          "description": "add `github.com/pulumi/pulumi-command/sdk` v1.2.1 (lightsail-instance target's remote install/SSH steps)",
+          "commit": "87d524b"
+        },
+        {
+          "description": "add `github.com/grokify/mogo` v0.74.9 (post-deploy health verification), replacing a local development pin",
+          "commit": "673fa63"
+        }
+      ],
+      "internal": [
+        {
+          "description": "`golangci-lint`: fix `gofmt` formatting",
+          "commit": "19ca18d"
+        }
+      ]
+    },
+    {
       "version": "v0.1.0",
       "date": "2026-06-22",
       "highlights": [
