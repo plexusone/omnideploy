@@ -107,6 +107,41 @@ func TestVerifyHealthRetry_ContextCanceledDuringBackoff(t *testing.T) {
 	}
 }
 
+func TestHealthCheckPathFor(t *testing.T) {
+	tests := []struct {
+		name string
+		cfg  *config.DeployConfig
+		want string
+	}{
+		{"no health check", &config.DeployConfig{}, ""},
+		{"container health check", &config.DeployConfig{Container: config.ContainerConfig{HealthCheck: &config.HealthCheck{Path: "/health"}}}, "/health"},
+		{"instance http health check", &config.DeployConfig{Instance: &config.InstanceConfig{HealthCheck: &config.VMHealthCheck{Kind: "http", Path: "/status"}}}, "/status"},
+		{"instance systemd health check has no HTTP path", &config.DeployConfig{Instance: &config.InstanceConfig{HealthCheck: &config.VMHealthCheck{Kind: "systemd"}}}, ""},
+		{"instance with no health check", &config.DeployConfig{Instance: &config.InstanceConfig{}}, ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := healthCheckPathFor(tt.cfg); got != tt.want {
+				t.Errorf("healthCheckPathFor() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSystemdHealthCheckScript(t *testing.T) {
+	script := systemdHealthCheckScript("app")
+	for _, want := range []string{
+		"systemctl is-active --quiet app",
+		"app is active",
+		"app did not become active",
+		"exit 1",
+	} {
+		if !strings.Contains(script, want) {
+			t.Errorf("systemdHealthCheckScript() missing %q, got:\n%s", want, script)
+		}
+	}
+}
+
 func TestAvailabilityZone(t *testing.T) {
 	if got := availabilityZone("us-west-2"); got != "us-west-2a" {
 		t.Errorf("availabilityZone(us-west-2) = %q, want us-west-2a", got)

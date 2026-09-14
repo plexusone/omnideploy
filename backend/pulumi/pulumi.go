@@ -406,13 +406,40 @@ func (b *Backend) deployLightsailInstance(ctx *pulumi.Context, spec *target.Reso
 	createScript := pulumi.ToSecret(pulumi.String(installServiceScript(inst, unit, envContent))).(pulumi.StringOutput)
 	updateScript := pulumi.ToSecret(pulumi.String(restartServiceScript(inst, envContent))).(pulumi.StringOutput)
 
-	if _, err := remote.NewCommand(ctx, cfg.Name+"-service", &remote.CommandArgs{
+	serviceCmd, err := remote.NewCommand(ctx, cfg.Name+"-service", &remote.CommandArgs{
 		Connection: conn,
 		Create:     createScript,
 		Update:     updateScript,
 		Triggers:   pulumi.Array{pulumi.String(binaryHash), pulumi.String(unit), pulumi.String(envHash)},
-	}, pulumi.DependsOn([]pulumi.Resource{artifact})); err != nil {
+	}, pulumi.DependsOn([]pulumi.Resource{artifact}))
+	if err != nil {
 		return fmt.Errorf("installing service: %w", err)
+	}
+
+	// systemd health verification (RMI-OMNIDEPLOY-007) runs inline as
+	// part of the same SSH session, retrying with the same
+	// attempts/delay tuning as the HTTP path's post-Apply verifyHealth —
+	// there's no HTTP surface to probe from Go for tools like
+	// grokify-omniagent, so the retry loop lives in the remote script
+	// itself instead. A non-zero exit fails this resource, which fails
+	// stack.Up() and surfaces as a deployment error the same way a
+	// failed HTTP verifyHealth does.
+	if inst.HealthCheck != nil && inst.HealthCheck.Kind == "systemd" {
+		if _, err := remote.NewCommand(ctx, cfg.Name+"-healthcheck", &remote.CommandArgs{
+			Connection: conn,
+			Create:     pulumi.String(systemdHealthCheckScript(inst.ServiceName)),
+			Triggers:   pulumi.Array{pulumi.String(binaryHash), pulumi.String(unit), pulumi.String(envHash)},
+		}, pulumi.DependsOn([]pulumi.Resource{serviceCmd})); err != nil {
+			return fmt.Errorf("verifying service health: %w", err)
+		}
+	}
+
+	// The HTTP health-check case is verified post-Apply by the existing
+	// verifyHealth (Backend.Apply), reused via healthCheckPathFor —
+	// export a "url" output so it has something to probe against, same
+	// as deployLightsail's Container Service "url" output.
+	if inst.HealthCheck != nil && inst.HealthCheck.Kind == "http" {
+		ctx.Export("url", pulumi.Sprintf("http://%s:%d", instance.PublicIpAddress, inst.HealthCheck.Port))
 	}
 
 	ctx.Export("public_ip", instance.PublicIpAddress)
@@ -559,6 +586,24 @@ sudo systemctl restart %s
 `, writeEnvFileScript(inst, envContent), inst.RemotePath, inst.ServiceName)
 }
 
+// systemdHealthCheckScript polls `systemctl is-active <serviceName>` with
+// the same attempts/delay tuning as the HTTP path's verifyHealthRetry,
+// so both health-check kinds absorb the same amount of post-restart
+// settling time before being declared unhealthy.
+func systemdHealthCheckScript(serviceName string) string {
+	return fmt.Sprintf(`set -eu
+for i in $(seq 1 %d); do
+  if sudo systemctl is-active --quiet %s; then
+    echo "%s is active"
+    exit 0
+  fi
+  sleep %d
+done
+echo "%s did not become active" >&2
+exit 1
+`, healthVerifyAttempts, serviceName, serviceName, int(healthVerifyDelay.Seconds()), serviceName)
+}
+
 // sizeToPower maps size to LightSail power.
 func sizeToPower(size string) string {
 	switch size {
@@ -641,17 +686,35 @@ const (
 	healthVerifyTimeout  = 5 * time.Second
 )
 
-// verifyHealth probes cfg's configured health-check path against
+// verifyHealth probes cfg's configured HTTP health-check path against
 // serviceURL, retrying briefly to absorb DNS/TLS settling immediately
 // after a deployment reaches ACTIVE. No-ops (returns nil) when the config
-// declares no health check or serviceURL is empty — there's nothing to
-// verify against for that target/config combination.
+// declares no HTTP health check or serviceURL is empty — there's nothing
+// to verify against for that target/config combination. Covers both the
+// container target (Container.HealthCheck) and the instance target's
+// HTTP-kind check (Instance.HealthCheck) via healthCheckPathFor; the
+// instance target's systemd-kind check is verified inline by the Pulumi
+// program itself (see deployLightsailInstance) since it has no HTTP
+// surface to probe.
 func verifyHealth(ctx context.Context, cfg *config.DeployConfig, serviceURL string, onOutput func(string)) error {
-	if cfg.Container.HealthCheck == nil || cfg.Container.HealthCheck.Path == "" || serviceURL == "" {
+	path := healthCheckPathFor(cfg)
+	if path == "" || serviceURL == "" {
 		return nil
 	}
-	url := strings.TrimRight(serviceURL, "/") + cfg.Container.HealthCheck.Path
+	url := strings.TrimRight(serviceURL, "/") + path
 	return verifyHealthRetry(ctx, url, healthVerifyAttempts, healthVerifyDelay, healthVerifyTimeout, onOutput)
+}
+
+// healthCheckPathFor returns the HTTP health-check path to verify
+// against for cfg, or "" if cfg declares no HTTP health check.
+func healthCheckPathFor(cfg *config.DeployConfig) string {
+	if cfg.Container.HealthCheck != nil && cfg.Container.HealthCheck.Path != "" {
+		return cfg.Container.HealthCheck.Path
+	}
+	if cfg.Instance != nil && cfg.Instance.HealthCheck != nil && cfg.Instance.HealthCheck.Kind == "http" {
+		return cfg.Instance.HealthCheck.Path
+	}
+	return ""
 }
 
 // verifyHealthRetry is verifyHealth's retry loop, parameterized so tests
