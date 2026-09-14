@@ -22,6 +22,7 @@ import (
 
 	// Register targets
 	_ "github.com/plexusone/omnideploy/target/lightsail"
+	_ "github.com/plexusone/omnideploy/target/lightsailinstance"
 
 	// Register backends
 	_ "github.com/plexusone/omnideploy/backend/pulumi"
