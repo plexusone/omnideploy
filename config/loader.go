@@ -47,11 +47,24 @@ func Parse(data []byte, format string) (*DeployConfig, error) {
 	return &cfg, nil
 }
 
-// Validate validates the deployment configuration.
+// Validate validates the deployment configuration. Instance != nil is the
+// authoritative signal for an instance (VM) deployment; absent that, this
+// defaults to container validation exactly as before Instance existed —
+// every pre-existing container error message and behavior is unchanged.
 func (c *DeployConfig) Validate() error {
 	if c.Name == "" {
 		return fmt.Errorf("name is required")
 	}
+	if c.Instance != nil {
+		if c.Container.Image != "" {
+			return fmt.Errorf("exactly one of container/instance may be set, got both")
+		}
+		return c.validateInstance()
+	}
+	return c.validateContainer()
+}
+
+func (c *DeployConfig) validateContainer() error {
 	if c.Container.Image == "" {
 		return fmt.Errorf("container.image is required")
 	}
@@ -65,6 +78,42 @@ func (c *DeployConfig) Validate() error {
 	}
 	if c.Service.Replicas < 0 {
 		return fmt.Errorf("service.replicas cannot be negative")
+	}
+	return nil
+}
+
+func (c *DeployConfig) validateInstance() error {
+	inst := c.Instance
+	if inst.Blueprint == "" {
+		return fmt.Errorf("instance.blueprint is required")
+	}
+	if inst.Bundle == "" {
+		return fmt.Errorf("instance.bundle is required")
+	}
+	if inst.BinaryPath == "" {
+		return fmt.Errorf("instance.binary_path is required")
+	}
+	if inst.RemotePath == "" {
+		return fmt.Errorf("instance.remote_path is required")
+	}
+	if inst.ServiceName == "" {
+		return fmt.Errorf("instance.service_name is required")
+	}
+	if hc := inst.HealthCheck; hc != nil {
+		switch hc.Kind {
+		case "http":
+			if hc.Path == "" {
+				return fmt.Errorf("instance.health_check.path is required when kind is http")
+			}
+			if hc.Port <= 0 || hc.Port > 65535 {
+				return fmt.Errorf("instance.health_check.port must be between 1 and 65535 when kind is http")
+			}
+		case "systemd":
+			// No additional fields required — ServiceName above is
+			// what systemctl is-active checks.
+		default:
+			return fmt.Errorf("instance.health_check.kind must be %q or %q, got %q", "http", "systemd", hc.Kind)
+		}
 	}
 	return nil
 }

@@ -14,8 +14,18 @@ type DeployConfig struct {
 	// Region is the cloud region to deploy to
 	Region string `yaml:"region,omitempty" json:"region,omitempty"`
 
-	// Container defines the container configuration
-	Container ContainerConfig `yaml:"container" json:"container"`
+	// Container defines the container configuration. Exactly one of
+	// Container/Instance is expected — Validate rejects both-set or
+	// neither-set. Container.Image=="" (its zero value) is how a
+	// lightsail-instance deploy leaves this unset.
+	Container ContainerConfig `yaml:"container,omitempty" json:"container,omitempty"`
+
+	// Instance defines a persistent-VM deployment (e.g. the
+	// lightsail-instance target) as an alternative to Container — a
+	// pre-built binary running as a systemd service, backed by the
+	// target's included persistent disk rather than a container's
+	// ephemeral filesystem.
+	Instance *InstanceConfig `yaml:"instance,omitempty" json:"instance,omitempty"`
 
 	// Service defines the service configuration
 	Service ServiceConfig `yaml:"service,omitempty" json:"service,omitempty"`
@@ -85,6 +95,61 @@ type HealthCheck struct {
 
 	// UnhealthyThreshold is the number of consecutive failures required
 	UnhealthyThreshold int `yaml:"unhealthy_threshold,omitempty" json:"unhealthy_threshold,omitempty"`
+}
+
+// InstanceConfig defines a persistent-VM deployment: a pre-built binary
+// installed as a systemd service on the target's instance, with the
+// instance's included disk as the storage layer.
+type InstanceConfig struct {
+	// Blueprint is the Lightsail OS image ID (e.g. "ubuntu_22_04"). See
+	// `aws lightsail get-blueprints`.
+	Blueprint string `yaml:"blueprint" json:"blueprint"`
+
+	// Bundle is the Lightsail instance bundle ID (e.g. "nano_3_0"),
+	// determining vCPU/memory/disk/price. See `aws lightsail
+	// get-bundles`. Deliberately has no default — silently picking a
+	// bundle size (unlike a container's Resources.Size) risks choosing
+	// one invalid for the given Blueprint.
+	Bundle string `yaml:"bundle" json:"bundle"`
+
+	// BinaryPath is the local path to the pre-built binary to deploy
+	// (cross-compiled by the caller, e.g. CGO_ENABLED=0 GOOS=linux
+	// GOARCH=amd64 go build) — the target ships it via SSH, it does not
+	// build it.
+	BinaryPath string `yaml:"binary_path" json:"binary_path"`
+
+	// RemotePath is the directory on the instance the binary (and its
+	// config/.env) are installed to, e.g. "/opt/omniagent".
+	RemotePath string `yaml:"remote_path" json:"remote_path"`
+
+	// ServiceName is the systemd unit name (without ".service").
+	ServiceName string `yaml:"service_name" json:"service_name"`
+
+	// SystemdUnit optionally overrides the generated systemd unit file
+	// content. Leave empty to use the generated default (binary at
+	// RemotePath, EnvironmentFile=RemotePath/.env, Restart=always).
+	SystemdUnit string `yaml:"systemd_unit,omitempty" json:"systemd_unit,omitempty"`
+
+	// HealthCheck configures post-deploy verification. Nil skips
+	// verification entirely — the right choice for a tool with no HTTP
+	// surface and no meaningful systemd-active signal beyond "it ran."
+	HealthCheck *VMHealthCheck `yaml:"health_check,omitempty" json:"health_check,omitempty"`
+}
+
+// VMHealthCheck configures post-deploy verification for an Instance
+// deployment. Exactly one Kind is used.
+type VMHealthCheck struct {
+	// Kind selects the verification method: "http" (probe an HTTP
+	// endpoint the app serves) or "systemd" (confirm the unit is active
+	// over SSH, for tools with no HTTP surface).
+	Kind string `yaml:"kind" json:"kind"`
+
+	// Path is the HTTP path to probe. Only used when Kind == "http".
+	Path string `yaml:"path,omitempty" json:"path,omitempty"`
+
+	// Port is the HTTP port to probe, and (when set) the port opened in
+	// the instance firewall alongside SSH. Only used when Kind == "http".
+	Port int `yaml:"port,omitempty" json:"port,omitempty"`
 }
 
 // ServiceConfig defines service-level settings.
