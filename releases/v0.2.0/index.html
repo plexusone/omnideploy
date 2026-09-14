@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://plexusone.github.io/omnideploy/configuration/secrets/">
+        <link rel="canonical" href="https://plexusone.github.io/omnideploy/releases/v0.2.0/">
       
       
-        <link rel="prev" href="../environment/">
+        <link rel="prev" href="../../reference/extending/">
       
       
-        <link rel="next" href="../../targets/">
+        <link rel="next" href="../v0.1.0/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Secrets Management - OmniDeploy</title>
+        <title>v0.2.0 - OmniDeploy</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#secrets-management" class="md-skip">
+        <a href="#v020" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Secrets Management
+              v0.2.0
             
           </span>
         </div>
@@ -465,8 +465,6 @@
       
   
   
-    
-  
   
   
     
@@ -479,11 +477,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -504,7 +504,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -522,7 +522,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../schema/" class="md-nav__link">
+      <a href="../../configuration/schema/" class="md-nav__link">
         
   
   
@@ -550,7 +550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/" class="md-nav__link">
+      <a href="../../configuration/examples/" class="md-nav__link">
         
   
   
@@ -578,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../environment/" class="md-nav__link">
+      <a href="../../configuration/environment/" class="md-nav__link">
         
   
   
@@ -603,37 +603,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Secrets Management
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../configuration/secrets/" class="md-nav__link">
         
   
   
@@ -649,270 +622,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Overview
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#environment-variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Environment Variables
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pulumi-secrets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi Secrets
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aws-secrets-manager" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AWS Secrets Manager
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS Secrets Manager">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-create-secret" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Create Secret
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-reference-in-config" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Reference in Config
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-grant-access" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Grant Access
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aws-ssm-parameter-store" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AWS SSM Parameter Store
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS SSM Parameter Store">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-create-parameter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Create Parameter
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-reference-in-config_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Reference in Config
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comparison" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Comparison
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Best Practices
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Best Practices">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-never-commit-secrets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Never Commit Secrets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-use-different-secrets-per-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Use Different Secrets Per Environment
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-rotate-secrets-regularly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Rotate Secrets Regularly
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-audit-access" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Audit Access
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-least-privilege" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Least Privilege
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cicd-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CI/CD Integration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="CI/CD Integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#github-actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GitHub Actions
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#with-oidc-recommended" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        With OIDC (Recommended)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1850,8 +1559,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1862,13 +1573,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
         
           
           <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
@@ -1889,7 +1598,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1904,10 +1613,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../releases/v0.2.0/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1923,6 +1659,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Highlights
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-lightsail-instance-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS LightSail Instance Target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secrets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reliability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reliability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1935,7 +1796,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../releases/v0.1.0/" class="md-nav__link">
+      <a href="../v0.1.0/" class="md-nav__link">
         
   
   
@@ -1990,10 +1851,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#highlights" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        Highlights
       
     </span>
   </a>
@@ -2001,44 +1862,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#environment-variables" class="md-nav__link">
+  <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Environment Variables
+        Features
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pulumi-secrets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pulumi Secrets
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#aws-secrets-manager" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AWS Secrets Manager
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS Secrets Manager">
+    <nav class="md-nav" aria-label="Features">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-create-secret" class="md-nav__link">
+  <a href="#aws-lightsail-instance-target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Create Secret
+        AWS LightSail Instance Target
       
     </span>
   </a>
@@ -2046,10 +1885,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-reference-in-config" class="md-nav__link">
+  <a href="#secrets" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Reference in Config
+        Secrets
       
     </span>
   </a>
@@ -2057,10 +1896,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-grant-access" class="md-nav__link">
+  <a href="#health-verification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Grant Access
+        Health Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reliability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reliability
       
     </span>
   </a>
@@ -2073,49 +1934,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#aws-ssm-parameter-store" class="md-nav__link">
+  <a href="#documentation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AWS SSM Parameter Store
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="AWS SSM Parameter Store">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-create-parameter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Create Parameter
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-reference-in-config_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Reference in Config
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comparison" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Comparison
+        Documentation
       
     </span>
   </a>
@@ -2123,113 +1945,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
+  <a href="#dependencies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Best Practices
+        Dependencies
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Best Practices">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-never-commit-secrets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Never Commit Secrets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-use-different-secrets-per-environment" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Use Different Secrets Per Environment
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-rotate-secrets-regularly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Rotate Secrets Regularly
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-audit-access" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Audit Access
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-least-privilege" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Least Privilege
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cicd-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CI/CD Integration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="CI/CD Integration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#github-actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GitHub Actions
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#with-oidc-recommended" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        With OIDC (Recommended)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2253,239 +1975,59 @@
   
 
 
-<h1 id="secrets-management">Secrets Management<a class="headerlink" href="#secrets-management" title="Permanent link">&para;</a></h1>
-<p>Securely manage sensitive values in your deployments.</p>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>OmniDeploy supports multiple approaches for handling secrets:</p>
-<ol>
-<li><strong>Environment Variables</strong> - Pass at deploy time</li>
-<li><strong>Pulumi Config</strong> - Encrypted in Pulumi state</li>
-<li><strong>AWS Secrets Manager</strong> - Fetched at container runtime</li>
-<li><strong>AWS SSM Parameter Store</strong> - Fetched at container runtime</li>
-</ol>
-<h2 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
-<p>The simplest approach - pass secrets when deploying:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># deploy.yaml</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">environment</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${API_KEY}</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DATABASE_URL}</span>
-</code></pre></div>
-<p>Deploy:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">API_KEY</span><span class="o">=</span>sk-...<span class="w"> </span><span class="nv">DATABASE_URL</span><span class="o">=</span>postgres://...<span class="w"> </span>omnideploy<span class="w"> </span>up<span class="w"> </span>--config<span class="w"> </span>deploy.yaml
-</code></pre></div>
-<p><strong>Pros:</strong></p>
+<h1 id="v020">v0.2.0<a class="headerlink" href="#v020" title="Permanent link">&para;</a></h1>
+<p>Released: 2026-09-14</p>
+<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Simple, no setup required</li>
-<li>Works everywhere</li>
+<li>New <code>lightsail-instance</code> target: a persistent AWS Lightsail VM running your binary as a systemd service, for workloads that need a local file (SQLite, sessions) to survive a redeploy — something the LightSail Container Service target can't provide</li>
+<li>Deploy-time secret resolution (<code>SecretRef</code>) wired through the runtime adapter and into the LightSail target, plus a remote <code>.env</code>/systemd <code>EnvironmentFile=</code> injection path for the new instance target</li>
+<li>Post-deploy health verification: an HTTP retry probe after a deployment reaches ACTIVE, plus a systemd <code>is-active</code> retry loop for the instance target's non-HTTP workloads</li>
 </ul>
-<p><strong>Cons:</strong></p>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+<h3 id="aws-lightsail-instance-target">AWS LightSail Instance Target<a class="headerlink" href="#aws-lightsail-instance-target" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Secrets visible in process list</li>
-<li>Not suitable for shared CI/CD</li>
-<li>No audit trail</li>
+<li>New <code>instance</code>/<code>health_check</code> config schema (<code>InstanceConfig</code>, <code>VMHealthCheck</code>) — exactly one of <code>container</code> or <code>instance</code> is set per deployment</li>
+<li>Pulumi resource graph: the VM instance, a Pulumi-managed SSH keypair, an SSH-only firewall (opening one additional port only for an HTTP health check), and redeploy-safe binary shipping</li>
+<li>Redeploys are idempotent: the binary is only re-shipped and the systemd service only reinstalled/restarted when its content, unit, or environment actually changed (tracked via content hashes)</li>
+<li>Secrets and environment variables injected via a remote <code>.env</code> file referenced by the systemd unit's <code>EnvironmentFile=</code></li>
+<li>Two health-check kinds: <code>http</code> (reuses the same retry-probe verification as the container target) and <code>systemd</code> (<code>systemctl is-active</code>, polled over the same SSH session — for outbound-only workloads like Discord bots with no HTTP surface)</li>
 </ul>
-<h2 id="pulumi-secrets">Pulumi Secrets<a class="headerlink" href="#pulumi-secrets" title="Permanent link">&para;</a></h2>
-<p>Store secrets encrypted in Pulumi state:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Set secret</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>~/.omnideploy/pulumi
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pulumi<span class="w"> </span>stack<span class="w"> </span><span class="k">select</span><span class="w"> </span>my-app
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>pulumi<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--secret<span class="w"> </span>api_key<span class="w"> </span>sk-...
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>pulumi<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--secret<span class="w"> </span>database_url<span class="w"> </span>postgres://...
-</code></pre></div>
-<p>Reference in deployment:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># deploy.yaml</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">environment</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${pulumi:api_key}</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${pulumi:database_url}</span>
-</code></pre></div>
-<p><strong>Pros:</strong></p>
+<h3 id="secrets">Secrets<a class="headerlink" href="#secrets" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Encrypted at rest</li>
-<li>Version controlled (with state)</li>
-<li>Team sharing via remote state</li>
+<li>Deploy-time <code>SecretRef</code> resolver supporting <code>ssm:</code> and <code>secretsmanager:</code> sources</li>
+<li>Resolved secrets injected into the LightSail (container) target's environment</li>
+<li><code>deploy.secrets</code> now flows through the runtime adapter end-to-end</li>
 </ul>
-<p><strong>Cons:</strong></p>
+<h3 id="health-verification">Health Verification<a class="headerlink" href="#health-verification" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Requires Pulumi CLI for management</li>
-<li>Secrets in Pulumi state</li>
+<li>Post-deploy HTTP retry probe after a deployment reaches <code>ACTIVE</code>, absorbing DNS/TLS settling time before declaring a deployment unhealthy</li>
 </ul>
-<h2 id="aws-secrets-manager">AWS Secrets Manager<a class="headerlink" href="#aws-secrets-manager" title="Permanent link">&para;</a></h2>
-<p>Store secrets in AWS and fetch at container runtime:</p>
-<h3 id="1-create-secret">1. Create Secret<a class="headerlink" href="#1-create-secret" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>aws<span class="w"> </span>secretsmanager<span class="w"> </span>create-secret<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--name<span class="w"> </span>my-app/api-key<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--secret-string<span class="w"> </span><span class="s2">&quot;sk-...&quot;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>aws<span class="w"> </span>secretsmanager<span class="w"> </span>create-secret<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--name<span class="w"> </span>my-app/database-url<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>--secret-string<span class="w"> </span><span class="s2">&quot;postgres://...&quot;</span>
-</code></pre></div>
-<h3 id="2-reference-in-config">2. Reference in Config<a class="headerlink" href="#2-reference-in-config" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># deploy.yaml</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">secrets</span><span class="p">:</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API_KEY</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secretsmanager:my-app/api-key</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">secretsmanager:my-app/database-url</span>
-</code></pre></div>
-<h3 id="3-grant-access">3. Grant Access<a class="headerlink" href="#3-grant-access" title="Permanent link">&para;</a></h3>
-<p>Ensure your container has IAM permissions:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;Version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;Statement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">      </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="s2">&quot;secretsmanager:GetSecretValue&quot;</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="p">],</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="s2">&quot;arn:aws:secretsmanager:*:*:secret:my-app/*&quot;</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">      </span><span class="p">]</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">}</span>
-</code></pre></div>
-<p><strong>Pros:</strong></p>
+<h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Secrets never in config or state</li>
-<li>Audit trail via CloudTrail</li>
-<li>Automatic rotation support</li>
-<li>Fine-grained access control</li>
+<li>Documented <code>${VAR}</code>/<code>${VAR:-default}</code> environment variable expansion is now implemented in config parsing</li>
 </ul>
-<p><strong>Cons:</strong></p>
+<h3 id="reliability">Reliability<a class="headerlink" href="#reliability" title="Permanent link">&para;</a></h3>
 <ul>
-<li>AWS-specific</li>
-<li>Additional cost (~$0.40/secret/month)</li>
-<li>Requires IAM setup</li>
+<li>Runtime adapter <code>Detect()</code> resolution is now deterministic</li>
+<li>Recoverable failures return errors instead of only logging them, and previously-unchecked errors are now handled</li>
 </ul>
-<h2 id="aws-ssm-parameter-store">AWS SSM Parameter Store<a class="headerlink" href="#aws-ssm-parameter-store" title="Permanent link">&para;</a></h2>
-<p>Similar to Secrets Manager, but simpler and cheaper:</p>
-<h3 id="1-create-parameter">1. Create Parameter<a class="headerlink" href="#1-create-parameter" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>aws<span class="w"> </span>ssm<span class="w"> </span>put-parameter<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>--name<span class="w"> </span>/my-app/api-key<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>--value<span class="w"> </span><span class="s2">&quot;sk-...&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>--type<span class="w"> </span>SecureString
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>aws<span class="w"> </span>ssm<span class="w"> </span>put-parameter<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span>--name<span class="w"> </span>/my-app/database-url<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span>--value<span class="w"> </span><span class="s2">&quot;postgres://...&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>--type<span class="w"> </span>SecureString
-</code></pre></div>
-<h3 id="2-reference-in-config_1">2. Reference in Config<a class="headerlink" href="#2-reference-in-config_1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># deploy.yaml</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">secrets</span><span class="p">:</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API_KEY</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssm:/my-app/api-key</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ssm:/my-app/database-url</span>
-</code></pre></div>
-<p><strong>Pros:</strong></p>
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Free for standard parameters</li>
-<li>Simple API</li>
-<li>Integrated with AWS</li>
+<li>New target page (<code>docs/targets/lightsail-instance.md</code>) covering configuration, deployment, outputs, both health-check kinds, SSH access, and limitations</li>
+<li>Configuration schema reference, examples, target comparison tables, CLI/API reference, and the AWS setup guide's IAM permissions (including a new least-privilege policy statement for the instance/keypair/firewall actions) all updated for the new target</li>
+<li>PRD/TRD/PLAN/ROADMAP specs for the Lightsail Instance target initiative</li>
 </ul>
-<p><strong>Cons:</strong></p>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Less features than Secrets Manager</li>
-<li>No automatic rotation</li>
+<li><code>github.com/aws/aws-sdk-go-v2</code> v1.42.0 → v1.47.0</li>
+<li><code>github.com/aws/aws-sdk-go-v2/config</code> v1.32.25 → v1.33.4</li>
+<li><code>github.com/aws/aws-sdk-go-v2/service/ecr</code> v1.58.4 → v1.65.0</li>
+<li><code>github.com/aws/aws-sdk-go-v2/service/iam</code> v1.54.5 → v1.64.0</li>
+<li><code>github.com/pulumi/pulumi/sdk/v3</code> v3.247.0 → v3.262.0</li>
+<li>Add <code>github.com/aws/aws-sdk-go-v2/service/secretsmanager</code> and <code>github.com/aws/aws-sdk-go-v2/service/ssm</code> (SecretRef resolver)</li>
+<li>Add <code>github.com/pulumi/pulumi-command/sdk</code> (lightsail-instance target's remote install/SSH steps)</li>
+<li>Add <code>github.com/grokify/mogo</code> v0.74.9 (post-deploy health verification), replacing a local development pin with the released version</li>
 </ul>
-<h2 id="comparison">Comparison<a class="headerlink" href="#comparison" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Security</th>
-<th>Cost</th>
-<th>Complexity</th>
-<th>Audit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Environment Variables</td>
-<td>Low</td>
-<td>Free</td>
-<td>Low</td>
-<td>None</td>
-</tr>
-<tr>
-<td>Pulumi Config</td>
-<td>Medium</td>
-<td>Free</td>
-<td>Medium</td>
-<td>Git history</td>
-</tr>
-<tr>
-<td>AWS Secrets Manager</td>
-<td>High</td>
-<td>~$0.40/mo</td>
-<td>Medium</td>
-<td>CloudTrail</td>
-</tr>
-<tr>
-<td>AWS SSM</td>
-<td>High</td>
-<td>Free</td>
-<td>Medium</td>
-<td>CloudTrail</td>
-</tr>
-</tbody>
-</table>
-<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
-<h3 id="1-never-commit-secrets">1. Never Commit Secrets<a class="headerlink" href="#1-never-commit-secrets" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># .gitignore</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>.env
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>.env.*
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>*.pem
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>*.key
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>credentials.json
-</code></pre></div>
-<h3 id="2-use-different-secrets-per-environment">2. Use Different Secrets Per Environment<a class="headerlink" href="#2-use-different-secrets-per-environment" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Staging</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>aws<span class="w"> </span>secretsmanager<span class="w"> </span>create-secret<span class="w"> </span>--name<span class="w"> </span>staging/my-app/api-key<span class="w"> </span>...
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Production</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>aws<span class="w"> </span>secretsmanager<span class="w"> </span>create-secret<span class="w"> </span>--name<span class="w"> </span>production/my-app/api-key<span class="w"> </span>...
-</code></pre></div>
-<h3 id="3-rotate-secrets-regularly">3. Rotate Secrets Regularly<a class="headerlink" href="#3-rotate-secrets-regularly" title="Permanent link">&para;</a></h3>
-<p>Set up automatic rotation in AWS Secrets Manager.</p>
-<h3 id="4-audit-access">4. Audit Access<a class="headerlink" href="#4-audit-access" title="Permanent link">&para;</a></h3>
-<p>Enable CloudTrail and monitor for unexpected secret access.</p>
-<h3 id="5-least-privilege">5. Least Privilege<a class="headerlink" href="#5-least-privilege" title="Permanent link">&para;</a></h3>
-<p>Grant minimal IAM permissions:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&quot;Effect&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">&quot;Action&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;secretsmanager:GetSecretValue&quot;</span><span class="p">],</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">&quot;Resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;arn:aws:secretsmanager:*:*:secret:my-app/*&quot;</span><span class="p">],</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nt">&quot;Condition&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="nt">&quot;StringEquals&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">      </span><span class="nt">&quot;aws:RequestTag/environment&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;production&quot;</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="p">}</span>
-</code></pre></div>
-<h2 id="cicd-integration">CI/CD Integration<a class="headerlink" href="#cicd-integration" title="Permanent link">&para;</a></h2>
-<h3 id="github-actions">GitHub Actions<a class="headerlink" href="#github-actions" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="nt">AWS_ACCESS_KEY_ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_ACCESS_KEY_ID }}</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">AWS_SECRET_ACCESS_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.AWS_SECRET_ACCESS_KEY }}</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="c1"># App secrets via AWS Secrets Manager - not in env</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">omnideploy up --config deploy.yaml --yes</span>
-</code></pre></div>
-<h3 id="with-oidc-recommended">With OIDC (Recommended)<a class="headerlink" href="#with-oidc-recommended" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure AWS credentials</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws-actions/configure-aws-credentials@v4</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nt">role-to-assume</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arn:aws:iam::123456789:role/github-actions</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">aws-region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">omnideploy up --config deploy.yaml --yes</span>
-</code></pre></div>
 
 
 
