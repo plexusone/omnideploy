@@ -6,7 +6,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
+	"github.com/grokify/mogo/net/http/healthz"
 	"github.com/pulumi/pulumi-aws/sdk/v6/go/aws/lightsail"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto/optdestroy"
@@ -96,6 +99,18 @@ func (b *Backend) Apply(ctx context.Context, spec *target.ResourceSpec, opts bac
 		if s, ok := v.Value.(string); ok {
 			outputs[k] = s
 		}
+	}
+
+	// Post-deploy health verification (RMI-OMNIDEPLOY-001): the deployment
+	// reaching ACTIVE proves the target's own internal health gate passed
+	// (e.g. Lightsail already waited on its container health check before
+	// returning), but not that the service is reachable from here — DNS
+	// propagation, TLS cert readiness, or a network path issue can still
+	// leave a "successfully deployed" service unreachable. Skip silently
+	// when the config declares no health check or the target exposed no
+	// URL output — there's nothing to verify against.
+	if err := verifyHealth(ctx, spec.Config, outputs["url"], opts.OnOutput); err != nil {
+		return nil, fmt.Errorf("deployment succeeded but health verification failed: %w", err)
 	}
 
 	// Extract resource changes
@@ -355,4 +370,54 @@ func buildEnvironment(plain map[string]string, resolvedSecrets map[string]string
 		env[k] = pulumi.ToSecret(pulumi.String(v)).(pulumi.StringOutput)
 	}
 	return env
+}
+
+// healthVerifyAttempts and healthVerifyDelay bound post-deploy health
+// verification: a deployment that just reached ACTIVE may still need a
+// few seconds for DNS/TLS to settle from this machine's vantage point.
+const (
+	healthVerifyAttempts = 5
+	healthVerifyDelay    = 3 * time.Second
+	healthVerifyTimeout  = 5 * time.Second
+)
+
+// verifyHealth probes cfg's configured health-check path against
+// serviceURL, retrying briefly to absorb DNS/TLS settling immediately
+// after a deployment reaches ACTIVE. No-ops (returns nil) when the config
+// declares no health check or serviceURL is empty — there's nothing to
+// verify against for that target/config combination.
+func verifyHealth(ctx context.Context, cfg *config.DeployConfig, serviceURL string, onOutput func(string)) error {
+	if cfg.Container.HealthCheck == nil || cfg.Container.HealthCheck.Path == "" || serviceURL == "" {
+		return nil
+	}
+	url := strings.TrimRight(serviceURL, "/") + cfg.Container.HealthCheck.Path
+	return verifyHealthRetry(ctx, url, healthVerifyAttempts, healthVerifyDelay, healthVerifyTimeout, onOutput)
+}
+
+// verifyHealthRetry is verifyHealth's retry loop, parameterized so tests
+// can use short delays instead of the real (deployment-appropriate)
+// defaults.
+func verifyHealthRetry(ctx context.Context, url string, attempts int, delay, timeout time.Duration, onOutput func(string)) error {
+	var lastErr error
+	for attempt := 1; attempt <= attempts; attempt++ {
+		if onOutput != nil {
+			onOutput(fmt.Sprintf("verifying health: %s (attempt %d/%d)", url, attempt, attempts))
+		}
+		if err := healthz.Probe(ctx, url, timeout); err != nil {
+			lastErr = err
+			if attempt < attempts {
+				select {
+				case <-time.After(delay):
+				case <-ctx.Done():
+					return fmt.Errorf("%s: %w", url, ctx.Err())
+				}
+			}
+			continue
+		}
+		if onOutput != nil {
+			onOutput(fmt.Sprintf("health verified: %s", url))
+		}
+		return nil
+	}
+	return fmt.Errorf("%s did not become healthy after %d attempts: %w", url, attempts, lastErr)
 }
