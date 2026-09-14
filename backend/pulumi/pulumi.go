@@ -3,14 +3,18 @@ package pulumi
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/grokify/mogo/net/http/healthz"
 	"github.com/pulumi/pulumi-aws/sdk/v6/go/aws/lightsail"
+	"github.com/pulumi/pulumi-command/sdk/go/command/remote"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto/optdestroy"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto/optpreview"
@@ -227,6 +231,8 @@ func (b *Backend) createProgram(spec *target.ResourceSpec, resolvedSecrets map[s
 		switch spec.Target {
 		case "lightsail":
 			return b.deployLightsail(ctx, spec, resolvedSecrets)
+		case "lightsail-instance":
+			return b.deployLightsailInstance(ctx, spec, resolvedSecrets)
 		default:
 			return fmt.Errorf("unsupported target: %s", spec.Target)
 		}
@@ -297,6 +303,186 @@ func (b *Backend) deployLightsail(ctx *pulumi.Context, spec *target.ResourceSpec
 	ctx.Export("service_name", service.Name)
 
 	return nil
+}
+
+// instanceSSHUser is the SSH user for Lightsail instances created from
+// Ubuntu blueprints — the blueprint grokify-omniagent's reference
+// implementation uses, and the common case for this target.
+const instanceSSHUser = "ubuntu"
+
+// deployLightsailInstance deploys to an AWS Lightsail VM instance running
+// a pre-built binary as a systemd service, reproducing
+// grokify-omniagent's reference deploy/lightsail/{setup,deploy}.sh
+// declaratively (docs/specs/TRD.md). Unlike deployLightsail's Container
+// Service target, the instance's disk is persistent across redeploys at
+// no extra cost. remote.Command's Create/Update split (rather than
+// lightsail.Instance's UserData, which is cloud-init and only runs once
+// at first boot) is what makes redeploys idempotent: Create installs the
+// systemd unit and starts the service; Update only restarts it; Triggers
+// is keyed on the binary's content hash plus the unit content so either
+// changing forces a re-run.
+func (b *Backend) deployLightsailInstance(ctx *pulumi.Context, spec *target.ResourceSpec, resolvedSecrets map[string]string) error { //nolint:unparam // resolvedSecrets is wired for the .env injection landing in RMI-OMNIDEPLOY-006 (Phase 2); the createProgram call site requires the same signature as deployLightsail
+	cfg := spec.Config
+	inst := cfg.Instance
+
+	keyPair, err := lightsail.NewKeyPair(ctx, cfg.Name+"-keypair", &lightsail.KeyPairArgs{
+		Name: pulumi.String(cfg.Name),
+	})
+	if err != nil {
+		return fmt.Errorf("creating key pair: %w", err)
+	}
+
+	instance, err := lightsail.NewInstance(ctx, cfg.Name, &lightsail.InstanceArgs{
+		Name:             pulumi.String(cfg.Name),
+		AvailabilityZone: pulumi.String(availabilityZone(spec.Region)),
+		BlueprintId:      pulumi.String(inst.Blueprint),
+		BundleId:         pulumi.String(inst.Bundle),
+		KeyPairName:      keyPair.Name,
+		Tags:             pulumi.ToStringMap(cfg.Tags),
+	})
+	if err != nil {
+		return fmt.Errorf("creating instance: %w", err)
+	}
+
+	portInfos := lightsail.InstancePublicPortsPortInfoArray{
+		&lightsail.InstancePublicPortsPortInfoArgs{
+			Protocol: pulumi.String("tcp"),
+			FromPort: pulumi.Int(22),
+			ToPort:   pulumi.Int(22),
+		},
+	}
+	if inst.HealthCheck != nil && inst.HealthCheck.Kind == "http" {
+		portInfos = append(portInfos, &lightsail.InstancePublicPortsPortInfoArgs{
+			Protocol: pulumi.String("tcp"),
+			FromPort: pulumi.Int(inst.HealthCheck.Port),
+			ToPort:   pulumi.Int(inst.HealthCheck.Port),
+		})
+	}
+	firewall, err := lightsail.NewInstancePublicPorts(ctx, cfg.Name+"-firewall", &lightsail.InstancePublicPortsArgs{
+		InstanceName: instance.Name,
+		PortInfos:    portInfos,
+	})
+	if err != nil {
+		return fmt.Errorf("configuring firewall: %w", err)
+	}
+
+	conn := remote.ConnectionArgs{
+		Host:       instance.PublicIpAddress,
+		User:       pulumi.String(instanceSSHUser),
+		PrivateKey: keyPair.PrivateKey,
+	}
+
+	binaryHash, err := binaryContentHash(inst.BinaryPath)
+	if err != nil {
+		return fmt.Errorf("hashing binary at %s: %w", inst.BinaryPath, err)
+	}
+
+	// The firewall must exist before SSH can reach the instance.
+	artifact, err := remote.NewCopyToRemote(ctx, cfg.Name+"-artifact", &remote.CopyToRemoteArgs{
+		Connection: conn,
+		RemotePath: pulumi.String(inst.RemotePath),
+		Source:     pulumi.NewFileAsset(inst.BinaryPath),
+		Triggers:   pulumi.Array{pulumi.String(binaryHash)},
+	}, pulumi.DependsOn([]pulumi.Resource{firewall}))
+	if err != nil {
+		return fmt.Errorf("copying artifact: %w", err)
+	}
+
+	unit := inst.SystemdUnit
+	if unit == "" {
+		unit = defaultSystemdUnit(inst)
+	}
+
+	if _, err := remote.NewCommand(ctx, cfg.Name+"-service", &remote.CommandArgs{
+		Connection: conn,
+		Create:     pulumi.String(installServiceScript(inst, unit)),
+		Update:     pulumi.String(restartServiceScript(inst)),
+		Triggers:   pulumi.Array{pulumi.String(binaryHash), pulumi.String(unit)},
+	}, pulumi.DependsOn([]pulumi.Resource{artifact})); err != nil {
+		return fmt.Errorf("installing service: %w", err)
+	}
+
+	ctx.Export("public_ip", instance.PublicIpAddress)
+	ctx.Export("service_name", pulumi.String(inst.ServiceName))
+
+	return nil
+}
+
+// availabilityZone derives a default AZ from the deploy region — Lightsail
+// requires one, and a single, predictable AZ per region is the right
+// default for a single-instance, capped-cost deployment (no multi-AZ
+// redundancy to configure).
+func availabilityZone(region string) string {
+	return region + "a"
+}
+
+// binaryContentHash hashes the local binary so remote.Command's Triggers
+// can detect "nothing changed" and skip re-running Create/Update — the
+// idempotent-redeploy behavior documented on deployLightsailInstance.
+func binaryContentHash(path string) (string, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	sum := sha256.Sum256(data)
+	return hex.EncodeToString(sum[:]), nil
+}
+
+// defaultSystemdUnit renders a systemd unit for inst when the config
+// doesn't supply its own (config.InstanceConfig.SystemdUnit), reproducing
+// the reference setup.sh's hardening: no new privileges, a read-only
+// system/home with one writable path (the binary's own directory, for
+// e.g. a local SQLite file dropped next to it). EnvironmentFile uses the
+// "-" prefix so a missing .env doesn't stop the service — Phase 2
+// (RMI-OMNIDEPLOY-006) starts writing that file; this unit already
+// expects it at that path.
+func defaultSystemdUnit(inst *config.InstanceConfig) string {
+	return fmt.Sprintf(`[Unit]
+Description=%s
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%s
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=-%s.env
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=%s
+
+[Install]
+WantedBy=multi-user.target
+`, inst.ServiceName, inst.RemotePath, inst.RemotePath, path.Dir(inst.RemotePath))
+}
+
+// installServiceScript is remote.Command's Create step: write the
+// systemd unit, make the binary executable, and enable+start the
+// service. Runs once — redeploys use restartServiceScript instead.
+func installServiceScript(inst *config.InstanceConfig, unit string) string {
+	return fmt.Sprintf(`set -eu
+sudo mkdir -p %s
+sudo chmod +x %s
+sudo tee /etc/systemd/system/%s.service > /dev/null <<'OMNIDEPLOY_UNIT'
+%s
+OMNIDEPLOY_UNIT
+sudo systemctl daemon-reload
+sudo systemctl enable %s
+sudo systemctl restart %s
+`, path.Dir(inst.RemotePath), inst.RemotePath, inst.ServiceName, unit, inst.ServiceName, inst.ServiceName)
+}
+
+// restartServiceScript is remote.Command's Update step: the binary was
+// already copied by remote.CopyToRemote by the time this runs, so this
+// only needs to make it executable again and restart the service — no
+// systemd unit reinstall, keeping redeploys fast and idempotent.
+func restartServiceScript(inst *config.InstanceConfig) string {
+	return fmt.Sprintf(`set -eu
+sudo chmod +x %s
+sudo systemctl daemon-reload
+sudo systemctl restart %s
+`, inst.RemotePath, inst.ServiceName)
 }
 
 // sizeToPower maps size to LightSail power.
