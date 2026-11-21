@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.47.1
 	github.com/aws/aws-sdk-go-v2/config v1.33.5
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.66.1
-	github.com/aws/aws-sdk-go-v2/service/iam v1.64.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.64.1
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.50.0
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.78.1
 	github.com/grokify/mogo v0.74.9
