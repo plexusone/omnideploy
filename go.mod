@@ -12,7 +12,7 @@ require (
 	github.com/grokify/mogo v0.75.0
 	github.com/pulumi/pulumi-aws/sdk/v6 v6.83.4
 	github.com/pulumi/pulumi-command/sdk v1.3.0
-	github.com/pulumi/pulumi/sdk/v3 v3.277.0
+	github.com/pulumi/pulumi/sdk/v3 v3.278.0
 	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v3 v3.0.1
 )
